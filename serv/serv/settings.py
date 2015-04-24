@@ -2,7 +2,7 @@
 import sys, os, platform
 
 SECRET_KEY = '#xrq3fac1=ehd2sh0$18&oy(da7@ae=d+8hox3v+t$4*g6d)u9'
-DEBUG = platform.node().lower() != 'Sancta'
+DEBUG = platform.node().lower() != 'sancta'
 TEMPLATE_DEBUG = DEBUG
 
 
