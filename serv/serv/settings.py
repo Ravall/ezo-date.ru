@@ -23,6 +23,12 @@ FIXTURE_DIRS = os.path.abspath(os.path.join(PATH, '../', 'files', 'fixtures'))
 COMPASS_INPUT = os.path.abspath(os.path.join(MEDIA_ROOT, 'scss'))
 COMPASS_OUTPUT = os.path.abspath(os.path.join(MEDIA_ROOT, 'css'))
 
+if DEBUG:
+    path = os.path.realpath('../snct_date')
+    sys.path.append(path)
+else:
+    sys.path.append('/home/web/snct_date');
+
 # ---- /DIRS ----
 
 
@@ -148,11 +154,7 @@ LOGGING = {
     }
 }
 
-if DEBUG:
-    path = os.path.realpath('../snct_date')
-    sys.path.append(path)
-else:
-    sys.path.append('/home/web/snct_date');
+
 
 
 COMPASS_STYLE = 'compressed'
