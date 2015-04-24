@@ -1,0 +1,71 @@
+@import "variable.scss";
+
+body {
+
+    span.system {
+        font-family: $font_H;
+        font-weight: 300;
+        font-size:1.2em;
+    }
+    @include media("max-width: 899px") {
+    }
+    @include media("min-width: 900px") {
+        div#ul, div#ur, div#dr, div#dl {
+            height:100%;
+            min-height: $size_content_height;
+            min-width: $size_content_width;
+            height: auto;
+        }
+        div#ul {
+            background: url('/static/img/ul.png') no-repeat;
+            background-attachment: fixed;
+        }
+        div#ur {
+            background: url('/static/img/ur.png') no-repeat right top;
+            background-attachment: fixed;
+        }
+        div#dr {
+            background: url('/static/img/dr.png') no-repeat right bottom;
+            background-attachment: fixed;
+        }
+        div#dl {
+            background: url('/static/img/dl.png') no-repeat left bottom;
+            background-attachment: fixed;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+    div.title {
+        text-align: center;
+        color: $color_main;
+    }
+    div#form {
+        h1 {
+            font-size:1.5em;
+        }
+        form {
+            padding-top: 50px;
+        }
+    }
+
+
+    div#text_content.error {
+        text-align: center;
+    }
+    div#text_content.all_num {
+        font-size: 1.5em;
+        text-align: center;
+    }
+    div#buttons {
+        text-align: center;
+    }
+
+}

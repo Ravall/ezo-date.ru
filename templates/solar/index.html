@@ -1,0 +1,23 @@
+{% extends 'solar/layout.html' %}
+{% load static %}
+
+{% block css %}
+    {{ block.super }}
+    <link type="text/css"
+        href="{% static "css/style-select.css" %}"
+        rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+{% include 'user/form/fulldateandplacebird.html' %}
+    <div id='text_content'>
+        {% autoescape off %}
+            {{ article.text.content }}
+        {% endautoescape %}
+    </div>
+
+{% endblock %}

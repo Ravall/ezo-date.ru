@@ -1,0 +1,35 @@
+{% extends 'solar/layout.html' %}
+{% load static %}
+{% load snctdate %}
+{% load solar %}
+
+
+{% block page_title %}Дата открытия{% endblock %}
+
+
+{% block content %}
+
+<div id='text_content'>
+    <div id='solar'>
+        <a href='{% url 'solar_open' city_id  b_dt year|add:-1 %}'>&larr;</a>
+        В {{year}} году
+        <a href='{% url 'solar_open' city_id b_dt year|add:1 %}'>&rarr;</a>
+        <br/> соляр {% past_future 'открылся' 'откроется' time %}
+    </div>
+
+    <h1>Дата открытия соляра</h1>
+    <h2>{{time|snct_dateformat:"[d] [M2]"}}<br/>{{time|date:'G:i'}}</h2>
+    <div class='info'>по местному времени города гождения</div>
+
+    {% if article %}
+        <h2>Идет {{day}} день</h2>
+        <div class='info'>с момента открытия соляра</div>
+        <div class='article'>
+            {% autoescape off %}
+                {{ article.text.content }}
+            {% endautoescape %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

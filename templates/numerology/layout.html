@@ -1,0 +1,42 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{% static "css/numerology.css" %}" charset="utf-8">
+{% endblock %}
+
+{% block meta_title %}Нумерология: {% block page_title %}{% endblock %}{% endblock %}
+
+
+{% block base_content %}
+<div id='ul'>
+    <div id='ur'>
+        <div id='dr'>
+            <div id='dl'>
+                <div id='menu'>
+                    <ul>
+                        <li>
+                            <a href='{% url 'home' %}'>&larr;&nbsp;другие&nbsp;сервисы</a>
+                        </li>
+                        <li {% if url == 'num_home' %}class='active'{% endif %}>
+                            <a href='{% url 'num_home' %}'
+                                title="число рождения"
+                                alt="рассчитать число рождения">
+                            число&nbsp;рождения</a>
+                        </li>
+                        <li {% if url == 'all_nums' %}class='active'{% endif %}>
+                            <a href='{% url 'all_nums' %}'
+                                title="все числа рождения"
+                                alt='посмотреть все числа рождения'>
+                            все&nbsp;числа&nbsp;рождения</a>
+                        </li>
+                    </ul>
+                </div>
+                {% block content %}{% endblock %}
+                {% include "ad.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

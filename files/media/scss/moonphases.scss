@@ -1,0 +1,36 @@
+@import "variable.scss";
+body {
+    div#form {
+        form {
+            padding-top: 0px;
+            div#element_city {
+                padding-bottom: 0px;
+            }
+        }
+    }
+    div#form_city {
+        display: none;
+    }
+
+    @include media("max-width: 899px") {
+        div#text_content {
+            div.image {
+                text-align: center;
+                display: block;
+            }
+        }
+    }
+
+
+    @include media("min-width: 900px") {
+
+
+        div#ul, div#ur, div#dr, div#dl {
+            background:none;
+            height:100%;
+            min-height: $size_content_height;
+            min-width: $size_content_width;
+            height: auto;
+        }
+    }
+}

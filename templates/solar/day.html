@@ -1,0 +1,36 @@
+{% extends 'solar/layout.html' %}
+{% load static %}
+{% load moon %}
+{% load url from future %}
+{% block page_title %}Ра {{ num }}{% endblock %}
+{% block meta_description %}Характеристка {{ num }} дня рождения. Луна - это подсознание человека, его скрытые возможности, инстинкты, интуиция. {% endblock %}
+{% block meta_keywords %}Расчитать лунное число рождения, лунный календарь, характеристика лунных дней{% endblock %}
+
+
+{% block og_meta %}
+    <meta property="og:image" content="{% get_static_prefix %}img/sun-vintage.png" />
+    <link rel="image_src" href="{% get_static_prefix %}img/sun-vintage.png" />
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link type="text/css" href="{% static "css/style-select.css" %}" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+{% block content %}
+
+<div id='text_content'>
+    <div class="image">
+        <img src="{% static "img/sun-vintage.png" %}"
+            alt='12 дней. Дома соляра'
+            tilte='Соляр. Расчет даты открытия онлайн'
+        >
+    </div>
+
+    <h1>{{ content.text.title }}</h1>
+
+    {% autoescape off %}
+        {{ content.text.content }}
+    {% endautoescape %}
+</div>
+
+{% endblock %}

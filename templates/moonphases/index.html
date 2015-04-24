@@ -1,0 +1,56 @@
+{% extends 'moonphases/layout.html' %}
+{% load static %}
+{% load phases %}
+
+{% block css %}
+    {{ block.super }}
+    <link type="text/css"
+        href="{% static "css/style-select.css" %}"
+        rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+
+
+<div id='text_content'>
+    <h2>{% alt_phase info.lunation %}</h2>
+    <div class="image">
+        <img src='{% get_static_prefix %}img/phases/{% img_phase_url info.lunation %}'
+            width='300px'
+            alt='{% alt_phase info.lunation %}'
+            title="{% alt_phase info.lunation %}">
+    </div>
+    <h1>Фаза луны для города <a class='context' href='#' id='show_city'>{{city}}</a></h1>
+    <div id='form_city'>
+        {% include 'user/form/citylive.html' %}
+    </div>
+    <div class='info'>
+        Следующее полнолуние: {{info.next_full_moon}}<br/>
+        Следующее новолуние: {{info.next_new_moon}}<br/>
+        Восход луны: {{info.previous_rising}}<br/>
+        Закат луны: {{info.next_setting}}<br/>
+        Лунный день: {{info.moon_day}}
+    </div>
+
+
+    {% autoescape off %}
+    {% endautoescape %}
+</div>
+<script type="text/javascript">
+    $('#form_city').hide();
+    $('#show_city').click(function() {
+        if ($('#form_city').is(':visible')) {
+            $('#form_city').hide();
+        } else {
+            $('#form_city').show();
+        }
+        return false;
+    })
+
+</script>
+
+{% endblock %}

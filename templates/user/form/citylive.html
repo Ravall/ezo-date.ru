@@ -1,0 +1,22 @@
+{% extends 'user/form/_form_with_city.html' %}
+{% block not_russia_links %}
+<div class='element'>
+    <a href='#'
+        id='detail_city'
+        title="определить лунный день рождения в других странах"
+        alt='определить лунный день рождения в других странах'>
+    Я живу не в России</a>
+    <div id='detail_form'>
+        <div>
+            <a href='#'
+                id='simple_search'
+                title="определить лунный день рождения в России"
+                alt='определить лунный день рождения в России'>
+            Я живу в России</a>
+        </div>
+        <div class='information'>
+            Если в подробном поиске города, вы не можете найти свой город - укажите ближайший
+        </div>
+    </div>
+</div>
+{% endblock %}

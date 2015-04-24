@@ -1,0 +1,62 @@
+{% load static %}
+{% load moon %}
+{% load url from future %}
+
+
+
+
+<script type="text/javascript">
+    var url_ajax_get_countries = '{% url 'ajax_get_countries' %}',
+        url_ajax_get_regions = '{% url 'ajax_get_regions' %}',
+        url_ajax_get_city = '{% url 'ajax_get_city' %}',
+        url_ajax_city_autocomplete = '{% url 'ajax_city_autocomplete' %}',
+        value_form_country_value = '{{form.country.value}}',
+        value_form_region_value = '{{form.region.value}}',
+        value_form_detail_city_value = '{{form.detail_city.value}}';
+</script>
+
+<div id='form'>
+    <form method="post" {% if form.errors %} class='error' {% endif %}>
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+        <div class='element row' id='element_{{field.name}}'>
+            {% if field.name not in "city_id,is_russian"|split:"," %}
+                <label class='{% if field.errors %}error{% endif %}'>{{field.label}}:</label>
+            {% endif %}
+            {{ field }}
+            {% if field.errors %}
+                <div>
+                    <ul class="errorlist">
+                    {% for error in field.errors %}
+                        <li>{{ error|escape }}</li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <div class='element'>
+                <a href='#'
+                    id='detail_city'
+                     title="определить лунный день рождения в других странах"
+                    alt='определить лунный день рождения в других странах'
+                    >Я родился не в России</a>
+                <div id='detail_form'>
+                    <div><a href='#'
+                        id='simple_search'
+                        title="определить лунный день рождения в России"
+                        alt='определить лунный день рождения в России'>Я родился в России</a></div>
+                    <div class='information'>
+                        Если в подробном поиске города, вы не можете найти свой родной город - укажите ближайший
+                    </div>
+                </div>
+            </div>
+
+            <div id='button'>
+                <button type="submit">рассчитать</button>
+            </div>
+
+        </form>
+    </div>
+
+<script type="text/javascript" src='{% static "js/moonbirthday.js" %}'></script>

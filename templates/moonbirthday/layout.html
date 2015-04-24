@@ -1,0 +1,49 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link type="text/css" href="{% static "css/moonbirthday.css" %}" rel="stylesheet" charset="utf-8"/>
+    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+{% block meta_title %}Лунный день рождения: {% block page_title %}{% endblock %}{% endblock %}
+
+
+{% block base_content %}
+<div id='m_div'></div>
+<div id='ul'>
+    <div id='ur'>
+        <div id='dr'>
+            <div id='dl'>
+                <div id='menu'>
+                    <ul>
+                        <li>
+                            <a href='{% url 'home' %}'>&larr;&nbsp;другие&nbsp;сервисы</a>
+                        </li>
+                        <li {% if url == 'home' %}class='active'{% endif %}>
+                            <a
+                                href='{% url 'moon_birthday_home' %}'
+                            >лунный&nbsp;день&nbsp;рождения</a>
+                        </li>
+                        <li {% if url == 'all' %}class='active'{% endif %}>
+                            <a href='{% url 'moon_birthday_all_nums' %}'
+                                title="характеристика лунных дней"
+                                alt="лунные даты рождения"
+                            >характеристика&nbsp;лунных&nbsp;дней</a>
+                        </li>
+
+                    </ul>
+                </div>
+                {% block content %}{% endblock %}
+                {% include "ad.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block block_js %}
+    <script type="text/javascript" src="{% static "js/jquery.mockjax.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+{% endblock %}

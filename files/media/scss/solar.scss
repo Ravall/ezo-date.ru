@@ -1,0 +1,183 @@
+@import "variable.scss";
+$color_bg: #d6dacb;
+body {
+
+
+    h1 {
+        text-align: center;
+        a {
+            text-decoration: none;
+        }
+        font-size: 16px;
+        padding: 10px;
+        margin: 0px;
+    }
+    div#solar {
+        padding-top: 20px;
+        text-align: center;
+    }
+    h2 {
+        text-align: center;
+        font-size: 54px;
+        padding-top: 0px;
+        padding-bottom: 10px;
+        margin: 0px;
+        line-height:50px;
+    }
+    div.info {
+        padding-top: 0px;
+        margin-top: 0px;
+        text-align: center;
+        font-size: 14px;
+    }
+    div.article {
+        text-align: left;
+    }
+
+    div#form {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+
+        div.element {
+            padding-bottom: 20px;
+        }
+        input {
+            padding:0px;
+            margin: 0px;
+
+        }
+        input#id_city {
+            font-size: 18px;
+        }
+        input#id_time {
+            padding:0px;
+        }
+        input#id_date{
+        }
+        h1 {
+            font-size:1.5em;
+        }
+        form {
+            padding-top: 50px;
+        }
+
+
+    }
+
+
+
+    @include media("max-width: 899px") {
+        div#form {
+            input {
+
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+        div#m_div {
+            width: 100%;
+            height: 300px;
+            background: url('/static/img/sun-vintage.png');
+            background-position: center;
+            background-repeat: no-repeat;
+
+        }
+        div#text_content {
+            h1 {
+                line-height:35px;
+            }
+            div.image {
+                display: none;
+            }
+            div.nums_list {
+                padding-top: 50px;
+            }
+        }
+
+    }
+    @include media("min-width: 900px") {
+
+        div#ul {
+            background: url('/static/img/sun_ul.png') no-repeat;
+            background-attachment: fixed;
+        }
+        div#ur {
+            background: url('/static/img/sun_ur.png') no-repeat right top;
+            background-attachment: fixed;
+        }
+        div#dr {
+            background: url('/static/img/sun_dr.png') no-repeat right bottom;
+            background-attachment: fixed;
+        }
+        div#dl {
+            background: url('/static/img/sun_dl.png') no-repeat left bottom;
+            background-attachment: fixed;
+        }
+        div#ul, div#ur, div#dr, div#dl {
+            height:100%;
+            min-height: $size_content_height;
+            min-width: $size_content_width;
+            height: auto;
+        }
+
+        div#form {
+            width: 400px;
+            input#id_city {
+                width: 400px;
+            }
+            select {
+                width: 387px;
+            }
+            input#id_time {
+                margin-left: 100px;
+            }
+            input#id_date{
+                margin-left: 100px;
+            }
+        }
+        div#text_content {
+            h1 {
+                line-height:35px;
+            }
+            div.image {
+                padding-top: 25px;
+                text-align: center;
+                padding-bottom: 20px;
+            }
+            div.nums_list {
+                padding-left: 100px;
+            }
+        }
+        span.system {
+            font-family: $font_H;
+            font-weight: 300;
+            font-size:1.2em;
+        }
+
+        div.title {
+            text-align: center;
+            color: $color_main;
+        }
+
+
+        div#text_content.error {
+            text-align: center;
+        }
+        div#text_content.all_num {
+            font-size: 1.5em;
+            text-align: center;
+        }
+        div#buttons {
+            text-align: center;
+        }
+
+
+        #element_country, #element_region, #element_detail_city {
+            display: none;
+        }
+
+    }
+
+
+}

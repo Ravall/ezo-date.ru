@@ -1,0 +1,3 @@
+[submodule "submodules/control"]
+	path = submodules/control
+	url = ../control

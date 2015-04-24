@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link type="text/css" href="{% static "css/solar.css" %}" rel="stylesheet" charset="utf-8"/>
+    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+{% block meta_title %}Соляр. Онлайн расчет. {% block page_title %}{% endblock %}{% endblock %}
+
+
+{% block base_content %}
+<div id='m_div'></div>
+<div id='ul'>
+    <div id='ur'>
+        <div id='dr'>
+            <div id='dl'>
+                <div id='menu'>
+                    <ul>
+                        <li>
+                            <a href='{% url 'home' %}'
+                                alt='Эзотерические даты'
+                                title="Эзотерика дня рождения">
+                            &larr;&nbsp;другие&nbsp;сервисы</a>
+                        </li>
+                        <li {% if url == 'home' %}class='active'{% endif %}>
+                            <a href='{% url 'solar_home' %}'
+                                title="расчитать соляр бесплатно"
+                                alt='соляр онлайн'>расчитать соляр</a>
+                        </li>
+                        <li {% if url == 'all' %}class='active'{% endif %}>
+                            <a href='{% url 'solar_12_days' %}'
+                                title="12 дней. Дома соляра"
+                                alt="12 дней. Дома соляра"
+                            >12&nbsp;дней</a>
+                        </li>
+
+                    </ul>
+                </div>
+                {% block content %}{% endblock %}
+                {% include "ad.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block block_js %}
+    <script type="text/javascript" src="{% static "js/jquery.mockjax.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+{% endblock %}

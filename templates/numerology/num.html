@@ -1,0 +1,35 @@
+{% extends 'numerology/layout.html' %}
+{% load static %}
+{% block page_title %}Число рождения {{ num }}{% endblock %}
+{% block meta_description %}{{ article.text.annonce }}{% endblock %}
+{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
+{% block og_meta %}
+    <meta property="og:title" content="Мое число рождения {{ num }}!" />
+    <meta property="og:image" content="{% get_static_prefix %}img/{{num}}.jpg" />
+    <link rel="image_src" href="{% get_static_prefix %}img/{{num}}.jpg" />
+{% endblock %}
+
+
+{% block content %}
+<div class='circle'>
+    <div class='num'>
+      <h2>{{ num }}</h2>
+      <div id='link'>
+          <a href='{% url 'num_home' %}'>рассчитать другое<br/>число рождения</a>
+      </div>
+    </div>
+
+</div>
+<div class="title">
+
+  </div>
+
+<div id='text_content'>
+    {% autoescape off %}
+        {{ article.text.content }}
+    {% endautoescape %}
+</div>
+
+
+{% endblock %}
+

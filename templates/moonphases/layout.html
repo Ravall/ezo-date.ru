@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block css %}
+    <link type="text/css" href="{% static "css/solar.css" %}" rel="stylesheet" charset="utf-8"/>
+    <link type="text/css" href="{% static "css/moonphases.css" %}" rel="stylesheet" charset="utf-8"/>
+    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+{% endblock %}
+
+{% block meta_title %}Фаза луны на сегодня{% block page_title %}{% endblock %}{% endblock %}
+
+
+{% block base_content %}
+<div id='ul'>
+    <div id='ur'>
+        <div id='dr'>
+            <div id='dl'>
+                <div id='menu'>
+                    <ul>
+                        <li>
+                            <a href='{% url 'home' %}'
+                                alt='Эзотерические даты'
+                                title="Эзотерика дня рождения">
+                            &larr;&nbsp;другие&nbsp;сервисы</a>
+                        </li>
+
+                    </ul>
+                </div>
+                {% block content %}{% endblock %}
+                {% include "ad.html" %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block block_js %}
+    <script type="text/javascript" src="{% static "js/jquery.mockjax.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+{% endblock %}
