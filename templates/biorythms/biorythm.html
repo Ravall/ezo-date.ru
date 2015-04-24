@@ -1,7 +1,8 @@
 {% extends 'biorythms/layout.html' %}
+{% load biodayinfo %}
 {% load static %}
 {% load snctdate %}
-{% load bio_dayinfo %}
+
 
 {% block page_title %} по дате рождения {{ birthday|snct_dateformat:"[dd].[mm].[y]" }} на {{ today_date|snct_dateformat:"[M1] [iY]" }} {% endblock %}
 {% block content %}

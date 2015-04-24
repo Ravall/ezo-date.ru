@@ -27,7 +27,7 @@ if DEBUG:
     path = os.path.realpath('../snct_date')
     sys.path.append(path)
 else:
-    sys.path.append('/home/web/snct_date');
+    sys.path.append('/home/web/snct_date')
 
 # ---- /DIRS ----
 
@@ -73,8 +73,10 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 TEMPLATE_LOADERS = (
+    'django_mobile.loader.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
+    'django.template.loaders.eggs.Loader',
 )
 
 
@@ -93,6 +95,7 @@ MIDDLEWARE_CLASSES = (
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
 INSTALLED_APPS = (
+
     # веб сервер
     'gunicorn',
     # все то, что предоставляется
@@ -114,17 +117,17 @@ INSTALLED_APPS = (
     'django.contrib.sitemaps',
     ###
     'serv',
-    'django_mobile',
-    'numerology',
     'biorythms',
+    'numerology',
     'moonbirthday',
     'solar',
     'moonphases',
     'raven.contrib.django.raven_compat',
     'pytils',
     'django.contrib.humanize',
-    'snct_date',
     'django_geoip',
+    'snct_date',
+    'django_mobile',
 )
 
 
@@ -178,9 +181,6 @@ else:
 API_URL = 'http://api.sancta.ru'
 
 ALLOWED_HOSTS = ['ezo-date.ru', '127.0.0.1']
-
-
-TEMPLATE_LOADERS = ('django_mobile.loader.Loader',) + TEMPLATE_LOADERS
 
 
 ROOT_URLCONF = 'serv.urls'
