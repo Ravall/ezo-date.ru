@@ -4,11 +4,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from serv.sitemap import sitemaps
+from frontend.v2 import V2
+
 
 admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'frontend.views.index', name='home'),
+    url(r'^v2$', V2.as_view(), name='v2'),
+
+
     url(r'^numerology/', include('numerology.urls')),
     url(r'^biorythms/', include('biorythms.urls')),
     url(r'^moonbirthday/', include('moonbirthday.urls')),
