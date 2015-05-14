@@ -7,6 +7,9 @@
         text-align: center;
 
     }
+    div.logo {
+        padding-top: 20px;
+    }
     div.logo div.text {
         position: absolute;
         top:150px;
@@ -22,13 +25,15 @@
 
 </style>
 <div id='text_content'>
+    <a href='{% url 'home' %}'>на главную</a>
     <div class='logo'>
         <img src='{% static 'img/fon.png' %}' width="400px">
         <div class='text'>2.0</div>
     </div>
     <div class='promo'>
+
         <h1>Планируется серьезное обновление сайта</h1>
-        <p>Если вы хотите, чтобы вас уведомили, когда новая версия начнет работать - оставьте ваш email и ждите писма с новостью </p>
+        <p>Если вы хотите, чтобы вас уведомили, когда новая версия начнет работать - оставьте ваш email и ждите письма с новостью </p>
 
         {% if messages %}
         <ul class="messages">

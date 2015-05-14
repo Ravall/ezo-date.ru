@@ -19,5 +19,5 @@ class V2(FormMixin, ProcessFormView, TemplateView):
         handle1 = open(file_to, 'a')
         handle1.write('email: {0} \n'.format(form.cleaned_data['email']))
         handle1.close()
-        messages.add_message(self.request, messages.INFO, 'Вы успешно подписаны')
+        messages.add_message(self.request, messages.INFO, 'Ваш email успешно сохранен')
         return HttpResponseRedirect(self.get_success_url())
