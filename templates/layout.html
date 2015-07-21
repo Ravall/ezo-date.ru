@@ -32,6 +32,35 @@
 
 </head>
 <body>
+
+
+    <script type="text/javascript">
+    (function () {
+
+        if ($(window).width() < 900) {
+            var ad = document.createElement("div"),
+                div = document.createElement("div"),
+                s = document.createElement("script"),
+                n;
+            ad.className = 'ad';
+            div.id = 'b_script_211050'
+            s.type = "text/javascript";
+            s.async = true;
+            s.src = "//cache.betweendigital.com/sections/2/211050.js";
+
+
+            n = document.getElementsByTagName("body")[0];
+            div.appendChild(s);
+            ad.appendChild(div);
+            n.appendChild(ad);
+
+        }
+    })();
+    </script>
+
+
+
+
     {% block base_content %}{% endblock %}
 
 </body>
