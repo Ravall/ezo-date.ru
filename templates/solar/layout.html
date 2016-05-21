@@ -1,49 +1,54 @@
-{% extends 'layout.html' %}
+{% extends 'layout_my.html' %}
 {% load static %}
 
-{% block css %}
-    <link type="text/css" href="{% static "css/solar.css" %}" rel="stylesheet" charset="utf-8"/>
-    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+{% block meta_page_title %}Дата открытия соляра.{% endblock %} 
+{% block meta_description %}Открытие соляра - это момент точного возвращения Солнца в такое положение, которое было у него в день вашего рождения. Последующие 12 дней следует провести наиболее осознанно - в это время происходит закладка программы на благоприятный год{% endblock %}
+{% block meta_keywords %}Соляр, дата рождения, открытие соляра, двенадцать дней, 12 дней после дня рождения{% endblock %}
+
+
+{% block og_meta %}
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/sun.png" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/sun.png" />
 {% endblock %}
 
-{% block meta_title %}Соляр. Онлайн расчет. {% block page_title %}{% endblock %}{% endblock %}
 
-
-{% block base_content %}
-<div id='m_div'></div>
-<div id='ul'>
-    <div id='ur'>
-        <div id='dr'>
-            <div id='dl'>
-                <div id='menu'>
-                    <ul>
-                        <li>
-                            <a href='{% url 'home' %}'
-                                alt='Эзотерические даты'
-                                title="Эзотерика дня рождения">
-                            &larr;&nbsp;другие&nbsp;сервисы</a>
-                        </li>
-                        <li {% if url == 'home' %}class='active'{% endif %}>
-                            <a href='{% url 'solar_home' %}'
-                                title="расчитать соляр бесплатно"
-                                alt='соляр онлайн'>расчитать соляр</a>
-                        </li>
-                        <li {% if url == 'all' %}class='active'{% endif %}>
-                            <a href='{% url 'solar_12_days' %}'
-                                title="12 дней. Дома соляра"
-                                alt="12 дней. Дома соляра"
-                            >12&nbsp;дней</a>
-                        </li>
-
-                    </ul>
-                </div>
-                {% block content %}{% endblock %}
-                {% include "ad.html" %}
-            </div>
-        </div>
+{% block content %}
+    <div class="promo">
+        <h1>{% block title %}Дата&nbsp;открытия соляра{% endblock %}</h1>
+        {% block img %}
+            <img    src="{% static 'img/sun.png' %}"
+                    alt='соляр - транзит солцна'
+                    title='транзит солнца. Соляр' />
+        {% endblock %}
     </div>
-</div>
 
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'solar_home' %} class="active" {% endif %}>
+                <a  href='{% url 'solar_home' %}'
+                    alt="астрология соляр онлайн"
+                    title="что такое Соляр">Что&nbsp;такое&nbsp;соляр</a>
+            </li>
+            <li {% if url == 'form' %} class="active" {% endif %}>
+                <a  href='{% url 'solar_form' %}'
+                    alt='рассчитать дату открытия соляра'
+                    title="Дата открытия соляра">Расчитать&nbsp;соляр</a>
+            </li>
+            <li {% if url == 'solar_open' %} class="active" {% endif %}>
+                <a  href='{% url 'solar_open' %}'
+                    alt='соляр, 12 дней, рассчитать'
+                    title="расчитать начало 12 дней">Мой&nbsp;соляр</a>
+            </li>
+            
+            <li {% if url == 'solar_12' %} class="active" {% endif %}>
+                <a  href='{% url 'solar_12' %}'
+                    alt='дом соляра. 12 домов'
+                    title="12 дней после дня рождения">12&nbsp;дней&nbsp;соляра</a>
+            </li>
+        </ul>
+    </div>
+    {% block sub_navigator %}{% endblock %}
+    <div id='text_content'>{% block text_content %}{% endblock %}</div>
 {% endblock %}
 
 {% block block_js %}

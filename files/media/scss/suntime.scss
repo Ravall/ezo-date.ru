@@ -1,0 +1,15 @@
+/* экраны */
+@media screen and (min-width: 1024px) {
+}
+/* планшеты */
+@media screen and (min-width: 700px) and (max-width: 1024px) {
+}
+/* телефоны */
+@media screen and (min-width: 320px) and (max-width: 700px) {
+}
+/* хня какая-то */
+@media screen and (max-width: 320px) {
+    div#clock {
+        display:none;
+    }
+}

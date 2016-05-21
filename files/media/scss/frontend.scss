@@ -75,12 +75,16 @@ body {
 
 
 div.form_fronetnd {
+    text-align: center;
     padding-bottom: 50px;
     h3 {
         padding-top: 0px;
         padding-bottom: 0px;
         margin-top: 0px;
         margin-bottom: 0px;
+    }
+    div.button {
+        float: left;
     }
 }
 

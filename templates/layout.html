@@ -1,69 +1,17 @@
+{% extends 'base_layout.html' %}
 {% load static %}
-<!DOCTYPE html>
-<!--[if IE 8]>
-  <html class="no-js lt-ie9" lang="ru">
-<![endif]-->
-<!--[if gt IE 8]><!-->
-<html class="no-js" lang="ru">
-<!--<![endif]-->
-<head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <!-- Set the viewport width to device width for mobile -->
-    <meta name="viewport" content="width=device-width" />
-    <meta name="description" content="{% block meta_description %}{% endblock %}" />
-    <meta name="keywords" content="{% block meta_keywords %}{% endblock %}" />
-    <title>{% block meta_title %}{% endblock %}</title>
-    {% block og_meta %}{% endblock %}
-    <meta name="document-state" content="Dynamic" />
-    <meta http-equiv="content-language" content="ru" />
-    <meta name='yandex-verification' content='65afcfa242fba953' />
+
+{% block head %}
+    <title>{% block meta_title %}{% endblock %} Дни силы</title>
     <script src="{% static "js/jquery-2.0.3.min.js" %}"></script>
     <script src="{% static "js/jquery.placeholder.min.js" %}"></script>
     <script src="{% static "js/jquery.maskedinput.min.js" %}"></script>
-    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <link type="text/css" rel="stylesheet" href="{% static "css/style.css" %}" charset="utf-8">
     {% block css %}{% endblock %}
-    <link href='http://fonts.googleapis.com/css?family=Ubuntu:300|Spirax|Open+Sans:300&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     <!--[if lt IE 9]>
         <script src="{% static "js/css3-mediaqueries.js" %}"></script>
         <script src="{% static "js/html5.js" %}"></script>
     <![endif]-->
+{% endblock %}
 
-</head>
-<body>
-    {% block base_content %}{% endblock %}
-
-</body>
-</html>
-
-{% block block_js %}{% endblock %}
-
-<!-- Yandex.Metrika counter -->
-<script type="text/javascript">
-(function (d, w, c) {
-    (w[c] = w[c] || []).push(function() {
-        try {
-            w.yaCounter23235721 = new Ya.Metrika({id:23235721,
-                    webvisor:true,
-                    clickmap:true,
-                    trackLinks:true,
-                    accurateTrackBounce:true});
-        } catch(e) { }
-    });
-
-    var n = d.getElementsByTagName("script")[0],
-        s = d.createElement("script"),
-        f = function () { n.parentNode.insertBefore(s, n); };
-    s.type = "text/javascript";
-    s.async = true;
-    s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js";
-
-    if (w.opera == "[object Opera]") {
-        d.addEventListener("DOMContentLoaded", f, false);
-    } else { f(); }
-})(document, window, "yandex_metrika_callbacks");
-</script>
-<noscript><div><img src="//mc.yandex.ru/watch/23235721" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
-
+{% block body %}{% block base_content %}{% endblock %}{% endblock %}

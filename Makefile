@@ -11,4 +11,5 @@ params: tag
 params:
 	@echo "PROJECT=sancta_serv\nTAG=$(tagn)" > project.params
 
-
+test:
+	python serv/manage.py test user

@@ -1,19 +1,28 @@
-{% extends 'layout.html' %}
-{% block base_content %}
+{% extends 'layout_my.html' %}
+{% load static %}
 
-<div class='circle'>
+
+{% block meta_head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="promo">
+  <div class='circle'>
     <div class='num'>
       <h2 class='error'>404</h2>
       <div id='link'>
-          Страница не найдена
+          страница не найдена
       </div>
     </div>
 </div>
-<div class="title">
-  <h1>Ошибка</h1>
 </div>
+
 <div id='text_content' class='error'>
-<p>Страница не найдена. Убедитесь в корректности адреса</p>
+<h2>Страница не найдена.<br/> Убедитесь в корректности адреса</h2>
 </div>
 
 

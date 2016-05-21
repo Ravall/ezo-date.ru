@@ -1,36 +1,35 @@
 {% extends 'solar/layout.html' %}
 {% load static %}
-{% load moon %}
-{% load url from future %}
-{% block page_title %}Ра {{ num }}{% endblock %}
-{% block meta_description %}Характеристка {{ num }} дня рождения. Луна - это подсознание человека, его скрытые возможности, инстинкты, интуиция. {% endblock %}
-{% block meta_keywords %}Расчитать лунное число рождения, лунный календарь, характеристика лунных дней{% endblock %}
+
+
+{% block meta_page_title %}Открытие соляра: {{ nday }} день после дня рождения.{% endblock %}
+
+{% block meta_description %}{{ article.text.annonce }}{% endblock %}
+{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
 
 
 {% block og_meta %}
-    <meta property="og:image" content="{% get_static_prefix %}img/sun-vintage.png" />
-    <link rel="image_src" href="{% get_static_prefix %}img/sun-vintage.png" />
+    <meta property="og:title" content="Открытие соляра: {{ nday }} день после дня рождения." />
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/sun-vintage.png" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/sun-vintage.png" />
+    <meta property="og:url" content="http://{{SITE_URL}}{% url 'solar_day' nday %}"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:type:article:section" content="Астрология"/>
 {% endblock %}
 
-{% block css %}
-    {{ block.super }}
-    <link type="text/css" href="{% static "css/style-select.css" %}" rel="stylesheet" charset="utf-8"/>
-{% endblock %}
-{% block content %}
 
-<div id='text_content'>
-    <div class="image">
+{% block img %}
         <img src="{% static "img/sun-vintage.png" %}"
             alt='12 дней. Дома соляра'
-            tilte='Соляр. Расчет даты открытия онлайн'
+            title='Соляр. Расчет даты открытия онлайн'
         >
-    </div>
+{% endblock %}
 
-    <h1>{{ content.text.title }}</h1>
+
+{% block text_content %}
+    <h1>{{ article.text.title }}</h1>
 
     {% autoescape off %}
-        {{ content.text.content }}
+        {{ article.text.content }}
     {% endautoescape %}
-</div>
-
 {% endblock %}

@@ -2,7 +2,7 @@
 import sys, os, platform
 
 SECRET_KEY = '#xrq3fac1=ehd2sh0$18&oy(da7@ae=d+8hox3v+t$4*g6d)u9'
-DEBUG = platform.node().lower() != 'Sancta'
+DEBUG = platform.node().lower() != 'sancta'
 TEMPLATE_DEBUG = DEBUG
 
 
@@ -19,7 +19,7 @@ STATIC_ROOT = os.path.abspath(
 STATICFILES_DIRS = (MEDIA_ROOT,)
 TEMPLATE_DIRS = (os.path.join(PATH, '../', 'templates'),)
 GEOIP_PATH = os.path.abspath(os.path.join(PATH, '../', 'files', 'GEO'))
-FIXTURE_DIRS = os.path.abspath(os.path.join(PATH, '../', 'files', 'fixtures'))
+
 COMPASS_INPUT = os.path.abspath(os.path.join(MEDIA_ROOT, 'scss'))
 COMPASS_OUTPUT = os.path.abspath(os.path.join(MEDIA_ROOT, 'css'))
 
@@ -28,6 +28,9 @@ if DEBUG:
     sys.path.append(path)
 else:
     sys.path.append('/home/web/snct_date')
+
+
+
 
 # ---- /DIRS ----
 
@@ -55,6 +58,11 @@ USE_TZ = True
 SITE_ID = 1
 
 
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
 
 
 STATICFILES_FINDERS = (
@@ -70,10 +78,13 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.static',
     'django.contrib.messages.context_processors.messages',
     'django_mobile.context_processors.flavour',
+    'serv.context_processors.debug',
+    'serv.context_processors.site_name',
+    'django.core.context_processors.request',
 )
 
 TEMPLATE_LOADERS = (
-    'django_mobile.loader.Loader',
+    #'django_mobile.loader.Loader',
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
     'django.template.loaders.eggs.Loader',
@@ -94,6 +105,11 @@ MIDDLEWARE_CLASSES = (
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
 
+
+
+
+
+
 INSTALLED_APPS = (
 
     # веб сервер
@@ -101,20 +117,21 @@ INSTALLED_APPS = (
     # все то, что предоставляется
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.redirects',
+    'registration',
     # scss
     'djcompass',
     #robot
     'robots_txt',
     #favion
     'favicon',
-    #sitemap
-    'django.contrib.sitemaps',
+    ###
+    'avatar',
     ###
     'serv',
     'biorythms',
@@ -122,15 +139,32 @@ INSTALLED_APPS = (
     'moonbirthday',
     'solar',
     'moonphases',
+    'suntime',
     'raven.contrib.django.raven_compat',
     'pytils',
     'django.contrib.humanize',
     'django_geoip',
     'snct_date',
     'django_mobile',
+    'user',
+    'frontend',
+    'services'
+
+
 )
 
+TEST_NON_SERIALIZED_APPS = (
+    'avatar',
+)
 
+ACCOUNT_ACTIVATION_DAYS = 2
+REGISTRATION_AUTO_LOGIN = False
+REGISTRATION_FORM = 'user.forms.form.RegForm'
+INCLUDE_REGISTER_URL = False
+SEND_ACTIVATION_EMAIL = True
+REGISTRATION_OPEN = True
+DEFAULT_FROM_EMAIL = 'admin@ezo-date.ru'
+LOGIN_REDIRECT_URL = '/'
 
 
 LOGGING = {
@@ -163,6 +197,7 @@ LOGGING = {
 COMPASS_STYLE = 'compressed'
 
 
+
 if DEBUG:
     DATABASES = {
         'default': {
@@ -172,8 +207,14 @@ if DEBUG:
             'PASSWORD': 'sancta_serv_user_password',
             'HOST': '127.0.0.1',
             'PORT': '',
+            'TEST': {
+                'NAME': 'sancta_serv_test',
+            },
+
+
         }
     }
+
 else:
     from production import DATABASES
 
@@ -217,3 +258,10 @@ MOONBIRTHDAY = {
 
 
 IPGEOBASE_ALLOWED_COUNTRIES = ['RU', 'UA']
+
+
+
+
+
+
+

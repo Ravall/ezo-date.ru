@@ -1,23 +1,13 @@
 {% extends 'solar/layout.html' %}
 {% load static %}
 
-{% block css %}
-    {{ block.super }}
-    <link type="text/css"
-        href="{% static "css/style-select.css" %}"
-        rel="stylesheet" charset="utf-8"/>
-{% endblock %}
+{% block meta_page_title %}Что такое соляр.{% endblock %} 
+{% block meta_description %}{{ article.text.annonce }}{% endblock %}
+{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
 
 
-
-
-{% block content %}
-
-{% include 'user/form/fulldateandplacebird.html' %}
-    <div id='text_content'>
-        {% autoescape off %}
-            {{ article.text.content }}
-        {% endautoescape %}
-    </div>
-
+{% block text_content %}
+    {% autoescape off %}
+        {{ article.text.content }}
+    {% endautoescape %}
 {% endblock %}

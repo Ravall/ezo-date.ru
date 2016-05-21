@@ -1,0 +1,25 @@
+<div id='form'>
+    <p>{{about|default:""}}</p>
+    {{ form.non_field_errors }}
+    <form method="post">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class='element row' id='element_{{field.name}}'>
+            <label>{{field.label}}:</label>
+            {{ field }}
+            {% if field.errors %}
+                <div>
+                    <ul class="errorlist">
+                    {% for error in field.errors %}
+                        <li>{{ error|escape }}</li>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+
+        <div id='button'>
+            <button type="submit">{{button|default:"ok"}}</button>
+        </div>
+    </form>
+</div>

@@ -2,12 +2,14 @@ from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-
+from numerology.views import IndexView, NumerologyFormView, AllNumsView, NumView, NumerologyResult
 
 urlpatterns = patterns('',
-    url(r'^$', 'numerology.views.index', name='num_home'),
-    url(r'(?P<digit>[0-9]+)', 'numerology.views.digit_birhday', name='num_birthday'),
-    url(r'^all$', 'numerology.views.all', name='all_nums'),
+    url(r'^$', IndexView.as_view(), name='num_home'),
+    url(r'^form$', NumerologyFormView.as_view(), name='num_form'),
+    url(r'^result$', NumerologyResult.as_view(permanent=False), name='num_result'),
+    url(r'(?P<digit>[0-9]+)', NumView.as_view(), name='num_birthday'),
+    url(r'^all$', AllNumsView.as_view(), name='all_nums'),
 )
 
 if settings.DEBUG:

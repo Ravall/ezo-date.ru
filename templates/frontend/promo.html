@@ -1,0 +1,294 @@
+{% extends 'layout_fnd.html' %}
+{% load static %}
+{% load phases %}
+{% load snctdate %}
+
+
+{% block meta_description %}дни силы - это календарь особых дней, таких как новолуния, высокие показатели биоритмов и другие важные даты, в которые нужно наиболее осознанно провести день{% endblock %}
+{% block meta_keywords %}дни силы, биоритмы, астрономический полдень, лунный календарь, лунный день рождения, нумерология дня рождения, солнечный полдень{% endblock %}
+
+{% block meta_title %}Дни силы - календарь особых дней{% endblock %}
+
+{% block meta_head %}
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+{% endblock %}
+
+{% block og_meta %}
+    <meta property="og:image" content="{% get_static_prefix %}img/moon_birthday.png" />
+    <link rel="image_src" href="{% get_static_prefix %}img/moon_birthday.png" />
+{% endblock %}
+
+
+
+
+{% block base_content %}
+<div class='about_project'>
+  {% comment %}
+    <div class='links'>
+        <a href=''
+            alt='Дни силы человека. даты'
+            title="Календарь дней силы">зарегистрироваться</a>
+        <a href='{% url 'auth_login' %}'
+            alt='мои дни силы'
+            title="Мой календарь дней силы">войти</a>
+    </div>
+{% endcomment %}
+
+    <div class='about'>
+        <h1 class="header">Дни силы</h1>
+
+        <p>Календарь особых дней, таких как полнолуния, новолуния, высокие показатели биоритмов и другие важные даты, которые нужно наиболее осознанно провести.</p>
+    </div>
+    <!--
+    <div class='buttons'>
+        <a  alt='Дни силы человека. даты'
+            title="Календарь дней силы"
+            href="" class="button">Зарегистрироваться</a>
+    </div>
+    -->
+</div>
+
+<div class='calendar'>
+    <div class='calendar'>
+        {% autoescape off %}
+        {{calendar}}
+        {% endautoescape %}
+    </div>
+    <div class='about'>
+        <h2>Следите за календарем дней силы</h2>
+
+        <p>Новые дела начинайте в растущую луну.</p>
+
+        <p>В дни с высоким умственным ритмом - займитесь самообразованием.</p>
+
+        <p>12 дней после открытия соляра - очень важные. Они закладывают программу на год вперед.</p>
+
+    </div>
+</div>
+
+
+<div class='widgets'>
+    <div class='clock'>
+        {% with q='1234'|make_list|random %}
+
+        {% if q == '1' %}
+            <h2>Во сколько ложиться спать?</h2>
+        {% elif q == '2' %}
+            <h2>Во сколько нужно вставать?</h2>
+        {% elif q == '3' %}
+            <h2>Во сколько нужно обедать?</h2>
+        {% elif q == '4' %}
+            <h2>Во сколько нужно ужинать?</h2>
+        {% endif %}
+
+
+        <canvas height="300" width="300" id="example">
+            Расчет астрономического полдня
+        </canvas>
+
+        <div class='info'>
+        {% if q == '1' %}
+            Сегодня лечь спать нужно не позднее {{sun_info.time_to_sleep|date:"H:i"}}<br/>
+        {% elif q == '2' %}
+            Сегодня вставать нужно не позднее {{sun_info.time_to_wakeup|date:"H:i"}}<br/>
+        {% elif q == '3' %}
+            Идеальное время для обеда {{sun_info.time_to_lunch|date:"H:i"}}<br/>
+        {% elif q == '4' %}
+            Идеальное время для ужина {{sun_info.time_to_dinner|date:"H:i"}}<br/>
+        {% endif %}
+        (<a href='{% url 'suntime_article' 'istinnyy_polden__chto_eto_i_kak_rasschitat' %}' alt='истинный полдень' title="Что такое солнечный полдень">откуда это время?</a>)
+        <br/><br/>
+            Восход солнца: {{sun_info.rising|date:"H:i"}}<br/>
+            Закат солнца: {{sun_info.setting|date:"H:i"}}<br/>
+            Солнечный полдень: {{sun_info.sun_noon|date:"H:i"}}<br/><br/>
+        </div>
+        {% endwith %}
+    </div>
+    <div class='moon'>
+        {% with q='1234'|make_list|random %}
+
+        {% if q == '1' %}
+            <h2>Когда планировать новые дела?</h2>
+        {% elif q == '2' %}
+            <h2>Когда начинать новое дело</h2>
+        {% elif q == '3' %}
+            <h2>Когда лучше завершать начатые дела?</h2>
+        {% elif q == '4' %}
+            <h2>Когда анализировать себя и делать выводы?</h2>
+        {% endif %}
+
+
+        <img src='{% get_static_prefix %}img/moon_phases/{% img_phase_url moon_info %}'
+            width='280px'
+            alt='{% alt_phase_period moon_info.today %}'
+            title="{% alt_phase_period moon_info.today %}">
+
+        <div class='info'>
+
+
+            {% if q == '1' %}
+                Идеальный день для планирования нового - новолуние:<br/>
+                {% if moon_info.periods.new.1 < now %}
+                    {% with period=moon_info.next_periods.new %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% else %}
+                    {% with period=moon_info.periods.new %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% endif %}
+            {% elif q == '2' %}
+                Новые дела лучше начинать на растущую луну:<br/>
+                {% if now < moon_info.periods.waxing.1 %}
+                    {% with period=moon_info.periods.waxing %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% else %}
+                    {% with period=moon_info.next_periods.waxing %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% endif %}
+            {% elif q == '3' %}
+                Незаконченные дела лучше завершать на убывающую луну:<br/>
+                {% if now < moon_info.periods.waning.1 %}
+                    {% with period=moon_info.periods.waning %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% else %}
+                    {% with period=moon_info.next_periods.waning %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% endif %}
+            {% elif q == '4' %}
+                Полнолуние - время для анализа и вывода:<br/>
+                {% if now < moon_info.periods.full.1 %}
+                    {% with period=moon_info.periods.full %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% else %}
+                    {% with period=moon_info.next_periods.full %}
+                        c {{period.0|snct_dateformat:"[d] [M2]"}} {{period.0|date:"H:i"}}  -
+                        по {{period.1|snct_dateformat:"[d] [M2]"}} {{period.1|date:"H:i"}}
+                    {% endwith %}
+                {% endif %}
+            {% endif %}
+            <br/><br/>
+            сейчас: {% alt_phase_period moon_info.today %}<br/>
+            
+        </div>
+        {% endwith %}
+    </div>
+</div>
+
+<div class='tools_cognition'>
+    <h2> инструменты познания </h2>
+    <div class="service numerology">
+        <img src="{% get_static_prefix %}img/numerology.png"
+            alt='Нумерология. Число рождения'
+            title='Нумерология по дате рождения' /><br/>
+        <a href='{% url 'num_home' %}'
+            alt='число рождения. нумерология'
+            title="Расчет числа рождения">Нумерология по дате рождения</a>
+        <div class='about'> Расчет числа рождения определяет врожденные черты характера - то, с чем человек приходит в мир - это помогает лучше разобраться в себе, своих сильных и слабых сторонах, избежать трудностей на пути к достижению своих целей.</div>
+
+    </div>
+
+    <div class="service biorythms">
+        <img src="{% get_static_prefix %}img/biorythms-promo.png"
+            alt='Биоритмы. Расчет   '
+            title='Биоритмы человека' /><br/>
+        <a href='{% url 'bio_home' %}'
+            alt='Биоритмы онлайн'
+            title="Расчет биоритмов"
+        >Биоритмы человека</a>
+        <div class='about'>Биоритмы — природные циклы биологических и энергетических изменений, которым подвержено все в природе. Рассчитав свои биоритмы, вы получите удобный график, показывающий периоды повышенной и приниженной активности, пиковые точки ваших ритмов.
+        </div>
+    </div>
+
+    <div class="service moon_birthday">
+        <img alt='Лунный день рассчитать'
+            title='лунный день рождения'
+            src="{% get_static_prefix %}img/moon_birthday.png" />
+        <br/>
+        <a href='{% url 'moonbirthday_home' %}'
+            title="лунный календарь рождения"
+            alt="Какой лунный день соответсвует рождению">Лунный день рождения</a>
+        <div class='about'>Луна влияет на подсознание человека, его скрытые возможности, инстинкты, интуицию. Лунное число рождения покажет на что следует обратить внимание, чего избегать и к чему стремиться.</div>
+    </div>
+    <div class="service solar">
+        <img alt='соляр - транзит солцна'
+            title='транзит солнца. Соляр'
+            src="{% get_static_prefix %}img/sun.png" />
+        <br/>
+        <a href='{% url 'solar_home' %}'
+            title="расчитать соляр дня рождения онлайн"
+            alt="астрология соляр онлайн">Дата открытия соляра</a>
+        <div class='about'>Открытие соляра - это момент точного возвращения Солнца в такое положение, которое было у него в день вашего рождения. Последующие 12 дней следует провести наиболее осознанно - в это время происходит закладка программы на благоприятный год.</div>
+    </div>
+
+    <div class="service moonphases">
+        <img alt='лунный календарь на {% now "F, Y" %}'
+            title='Фазы луны на {% now "F, Y" %}'
+            src="{% get_static_prefix %}img/moon_phases/waning_crescent_4.png" />
+        <br/>
+        <a href='{% url 'moonphases_home' %}'
+            title="фаза луны сегодня"
+            alt="фазы луны">Фаза луны</a>
+        <div class='about'>Выстроить свои дела в соотвествии с положением луны - весьма полезная практика. Дела лучше начинать на растущей луне, а заканчивать на убывающей. Зная какая сегодня фаза луны - вы сэкономите немало сил и времени.</div>
+    </div>
+
+    <div class="service clock">
+        <img alt='астрономический полдень'
+            title='режим дня'
+            src="{% get_static_prefix %}img/clock.png" />
+        <br/>
+        <a href='{% url 'suntime_home' %}'
+            title="астрономический полдень и другие сервисы времени"
+            alt="астрономический полдень">Солнечное время</a>
+        <div class='about'>Режим дня это важно: если ложиться спать, просыпатья и питаться в соответсвии с солнечными ритами вы почувствуете гармонию с природой, у вас будет больше сил и энергии в течение дня. </div>
+    </div>
+
+</div>
+<div class='comeon'>
+    <h2>Каледнарь дней силы</h2>
+    <div class="about">
+        {% comment %}
+        Присоединившись к проекту вы получите свой профиль силы и рекомендации - на что обратить внимание, чего опасаться.
+        Подключайте сервисы, ведите свой личный календарь дней силы, и вы не пропустите важные даты.
+        Сохраняйте профиля друзей и вы всегда будете в курсе важных дней близких вам людей.
+        {% endcomment %}
+    </div>
+    {% comment %}
+    <div class='buttons'>
+        <a  alt='Дни силы человека. даты'
+            title="Календарь дней силы"
+            href="" class="button">Присоединиться</a>
+    </div>
+    {% endcomment %}
+</div>
+<div class='footer'>
+    <div class='about'>
+        © 2014 - {% now "Y" %} Дни силы.
+    </div>
+</div>
+<div class='ad'>
+    {% include "ad.html" %}
+</div>
+
+
+
+{% endblock %}
+
+{% block block_js %}
+<script type="text/javascript" src='{% static 'js/promo.js' %}'></script>
+<script type="text/javascript">
+    loadClock('example',{{sun_info.diff_second}});
+</script>
+{% endblock %}

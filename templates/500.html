@@ -1,21 +1,35 @@
-{% extends 'layout.html' %}
-{% block base_content %}
+{% extends 'layout_my.html' %}
+{% load static %}
 
-<div class='circle'>
+
+{% block meta_head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+<div class="promo">
+  <div class='circle'>
     <div class='num'>
       <h2 class='error'>500</h2>
       <div id='link'>
-          Ошибка на сервере
+          ошибка на сервере
       </div>
     </div>
 </div>
-<div class="title">
-  <h1>Ошибка</h1>
 </div>
+
 <div id='text_content' class='error'>
-<p>Произошла ошибка на сервере. Администраторы сайта уже предупреждены и трудятся над исправлением </p>
+<h2>Произошла ошибка на сервере. Администраторы сайта уже предупреждены и трудятся над исправлением </h2>
 </div>
 
 
 {% endblock %}
+
+
+
+
+
 

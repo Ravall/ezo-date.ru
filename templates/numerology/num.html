@@ -1,34 +1,51 @@
 {% extends 'numerology/layout.html' %}
 {% load static %}
+
 {% block page_title %}Число рождения {{ num }}{% endblock %}
 {% block meta_description %}{{ article.text.annonce }}{% endblock %}
 {% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
+
 {% block og_meta %}
     <meta property="og:title" content="Мое число рождения {{ num }}!" />
-    <meta property="og:image" content="{% get_static_prefix %}img/{{num}}.jpg" />
-    <link rel="image_src" href="{% get_static_prefix %}img/{{num}}.jpg" />
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/{{num}}.jpg" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/{{num}}.jpg" />
+    <meta property="og:url" content="http://{{SITE_URL}}{% url 'num_birthday' num %}"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:type:article:section" content="Нумерология"/>
 {% endblock %}
 
 
-{% block content %}
-<div class='circle'>
-    <div class='num'>
-      <h2>{{ num }}</h2>
-      <div id='link'>
-          <a href='{% url 'num_home' %}'>рассчитать другое<br/>число рождения</a>
-      </div>
-    </div>
+{% block title %}Число рождения {{ num }}{% endblock %}
+{% block meta_page_title %}Число рождения {{ num }}.{% endblock %}
 
+
+{% block img %}
+  <img  src="{% get_static_prefix %}img/{{num}}.png"
+        alt='Нумерология по дате рождения'
+        title='Нумерология по дате рождения' />
+{% endblock %}
+
+
+
+{% block sub_navigator %}
+<div class='navigator'>
+    <ul>
+        {% for n in all_nums %}
+        <li {% if n|slugify == num %} class='active' {% endif %}>
+            <a  href='{% url 'num_birthday' n %}'
+                title='Число рождения {{n}}'
+                alt="{{n}} число рождения">{{n}}</a>
+        <li>
+        {% endfor %}
+    </ul>
 </div>
-<div class="title">
+{% endblock %}
 
-  </div>
 
-<div id='text_content'>
+{% block text_content %}
     {% autoescape off %}
         {{ article.text.content }}
     {% endautoescape %}
-</div>
 
 
 {% endblock %}

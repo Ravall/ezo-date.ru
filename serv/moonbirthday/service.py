@@ -18,8 +18,18 @@ def get_city(city):
         'id': city.id,
         'lat':str(city.lat),
         'long':str(city.lon),
-        'timezone':str(region.timezone)
+        'timezone':str(region.timezone),
     }
+
+
+def get_city_by_id(city_id):
+    try:
+        city = SxgeoCities.objects.get(pk=city_id)
+        city_name = city.name_ru
+    except:
+        city_id = False,
+        city_name = False
+    return city_name, city_id
 
 
 def get_default_city(ip):
@@ -86,7 +96,7 @@ def get_geo_by_cityid(city_id):
     return {
         'lat':str(result_raw[0][4]),
         'long':str(result_raw[0][5]),
-        'timezone':str(result_raw[0][6])
+        'timezone':str(result_raw[0][6]),
     }
 
 def _to_local(tz, dt):
@@ -99,24 +109,3 @@ def _to_utc(tz, l_dt):
     dt = local_tz.localize(l_dt)
     return dt.astimezone(pytz.UTC)
 
-def get_moon_bithday(my_dt, city_id):
-
-
-
-    geo = get_geo_by_cityid(city_id)
-
-    ob = ephem.Observer()
-    ob.lat = geo['lat']
-    ob.long = geo['long']
-    ob.date = ephem.Date(_to_utc(geo['timezone'], my_dt))
-    new_moon = ephem.previous_new_moon(ob.date)
-    dt = new_moon
-    moon_bithday = 0
-    for i in range(1,31):
-        moon_bithday += 1
-        ob.date = dt
-        dt = ob.next_rising(ephem.Moon())
-        if _to_local(geo['timezone'], dt.datetime()) > my_dt:
-            break
-
-    return moon_bithday

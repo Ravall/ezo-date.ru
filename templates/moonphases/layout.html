@@ -1,41 +1,65 @@
-{% extends 'layout.html' %}
+{% extends 'layout_my.html' %}
 {% load static %}
+{% load snctdate %}
+{% load phases %}
 
-{% block css %}
-    <link type="text/css" href="{% static "css/solar.css" %}" rel="stylesheet" charset="utf-8"/>
-    <link type="text/css" href="{% static "css/moonphases.css" %}" rel="stylesheet" charset="utf-8"/>
-    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+
+{% block meta_description %}Выстроить свои дела в соотвествии с положением луны - весьма полезная практика. Дела лучше начинать на растущей луне, а заканчивать на убывающей. Зная какая сегодня фаза луны - вы сэкономите немало сил и времени. Сервис высчитывает фазу луны сегодня.{% endblock %}
+{% block meta_keywords %}Фаза луны, новолуние, полнолуние, растущая луна, убывающая луна, фаза луны сегодня{% endblock %}
+
+{% block meta_page_title %}Фазы луны.{% endblock %} 
+
+{% block og_meta %}
+<meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/moon_phases/waxing_gibbous_3.png" />
+<link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/moon_phases/waxing_gibbous_3.png" />
 {% endblock %}
 
-{% block meta_title %}Фаза луны на сегодня{% block page_title %}{% endblock %}{% endblock %}
+
+{% block meta_head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/moonphases.css' %}">
+{% endblock %}
 
 
-{% block base_content %}
-<div id='ul'>
-    <div id='ur'>
-        <div id='dr'>
-            <div id='dl'>
-                <div id='menu'>
-                    <ul>
-                        <li>
-                            <a href='{% url 'home' %}'
-                                alt='Эзотерические даты'
-                                title="Эзотерика дня рождения">
-                            &larr;&nbsp;другие&nbsp;сервисы</a>
-                        </li>
+{% block content %}
+    <div class="promo">
+        <h1>{% block title %}{% endblock %}</h1>
+        {% block img %}
+            <img src='{% get_static_prefix %}img/moon_phases/{% img_phase_url moon_info %}'
+                width='280px'
+                alt='{% alt_phase_period moon_info.today %}'
+                title="{% alt_phase_period moon_info.today %}">
+                <h2>{% alt_phase_period moon_info.today %}</h2>
+                {% phase_time moon_info 'periods' 'this_day' %} (<a alt='фазы луны в {{city}}' title='календарь луны в выбранном городе' href='{% url 'moonphases_city' %}'>{{city}}</a>)
+        {% endblock %}
 
-                    </ul>
-                </div>
-                {% block content %}{% endblock %}
-                {% include "ad.html" %}
-            </div>
-        </div>
     </div>
-</div>
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'moonphases_home' %} class="active" {% endif %}>
+                <a  href='{% url 'moonphases_home' %}'
+                    alt="фазы луны на сегодня"
+                    title="Какая фаза луны сегодня">Луна&nbsp;сегодня</a>
+            </li>
+            <li {% if url == 'moonphases_month' %} class="active" {% endif %}>
+                <a  href='{% url 'moonphases_month' %}'
+                    alt='Фазы луны в {{now|snct_dateformat:"[M2]"}}'
+                    title="Фазы луны в {{now|snct_dateformat:"[M2]"}}">Фазы&nbsp;луны&nbsp;{{now|snct_dateformat:"[M2]"}}</a>
+            </li>
+            <li {% if url == 'moonphases_articles' %} class="active" {% endif %}>
+                <a  href='{% url 'moonphases_articles' %}'
+                    alt='Как провести полнолуние'
+                    title="практики на полнолуние и новолуние">Жить&nbsp;в&nbsp;ритме&nbsp;луны</a>
+            </li>
+        </ul>
+    </div>
 
+    {% block sub_navigator %}{% endblock %}
+    <div id='text_content'>{% block text_content %}{% endblock %}</div>
 {% endblock %}
 
-{% block block_js %}
-    <script type="text/javascript" src="{% static "js/jquery.mockjax.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
-{% endblock %}
+
+
+
+
+

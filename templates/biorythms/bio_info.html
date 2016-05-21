@@ -1,0 +1,58 @@
+{% load biodayinfo %}
+{% load static %}
+{% load snctdate %}
+
+
+
+<div class='todayinfo text_content'>
+    <div class='biorithms'>
+        <h2> Биоритмы на
+        {% if date_map.current|snct_dateformat:"[iToday]" == "" %}
+            {{date_map.current|snct_dateformat:"[d] [M2] [iY]"}}
+        {% else %}
+            {{date_map.current|snct_dateformat:"[iToday]"}}
+        {% endif %}</h2>
+        <ul>
+            <li class='period23'>
+                <span class='period23'>&mdash;&nbsp;</span>
+                Физический биоритм: {{ today_info|biorithm:23|safe }}
+            </li>
+            <li>
+                <span class='period28'>&mdash;&nbsp;</span>
+                Эмоциональный биоритм: {{ today_info|biorithm:28|safe}}
+            </li>
+            <li>
+                <span class='period33'>&mdash;&nbsp;</span>
+                Умственный биоритм: {{ today_info|biorithm:33|safe}}
+            </li>
+        </ul>
+    </div>
+    {% autoescape off %}
+        {% if critical_info %}
+            <div class='day_info'>
+                <h2>Особенность дня:</h2>
+                <p>
+                    {{ critical_info|critical_type_info }}
+                    {{ critical_info|period_info  }}
+                </p>
+            </div>
+        {% endif %}
+    {% endautoescape %}
+</div>
+<div class='calendar'>
+    {% autoescape off %}
+        {{calendar}}
+    {% endautoescape %}
+</div>
+<script type="text/javascript">
+{% autoescape off %}
+    var biorythm_data = {{data|default:"''"}};
+    var today_date = '{% now "Y-m-d" %}';
+    var url_ajax_get_data = '{% url 'ajax_get_data' %}';
+    var current_date = '{{date_map.current}}';
+    if (typeof bio_ajax != "undefined") {
+        graph(biorythm_data);
+        bio_ajax();
+    }
+{% endautoescape %}
+</script>

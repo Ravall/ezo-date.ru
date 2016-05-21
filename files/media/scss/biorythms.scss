@@ -1,103 +1,121 @@
-@import "variable.scss";
-body {
+@import "../foundation/scss/foundation.scss";
 
-    div#smart_nav {
+div.loading {
+    opacity: 0.3;
+    background-image: url('/static/img/loading.gif');
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+div.bio_info {
+    @include grid-row();
+    div.todayinfo{
+        padding-top: 40px;
+        @include grid-column(6, false, false, 1);
+        h2 {
             text-align: center;
-            a {
-                padding-left: 10px;
-            }
-            a.active {
-                text-decoration: none;
-                color: #000;
-            }
         }
-
-
-    @include media("max-width: 899px") {
-        div#form {
-             h1 {
-                padding-top: 60px;
+        div.biorithms {
+            ul {
+                list-style-type:none;
             }
-        }
-        div#todayinfo {
-
-            margin:10px auto;
-            padding-top: 10px;
-            text-align: left;
-        }
-
-    }
-    @include media("min-width: 900px") {
-        div#form {
-            text-align: center;
-            width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            h1 {
-                padding-top: 60px;
-                margin: 0;
-                padding-bottom: 20px;
+            span.period23, span.period28,span.period33 {
                 font-weight: bold;
             }
-        }
-        div#todayinfo {
-            width: 600px;
-            margin:10px auto;
-            padding-top: 10px;
-            text-align: left;
-        }
-        div#smart_nav {
-            width: 400px;
-            margin:10px auto;
+            span.period23 {
+                color: #e67869;
+            }
+            span.period28 {
+                color: #3b9647;
+            }
+            span.period33 {
+                color: #193020;
+            }
         }
     }
 }
 
-div#top {
-    background: url('/static/img/up_line.png') repeat-x;
-    height: 150px;
-}
 
-div#down {
-    margin-top: 50px;
-    background: url('/static/img/down_line.png') repeat-x;
-    height: 150px;
-}
+div.calendar {
+    @include grid-column(5);
+    table {
+        a {
+            text-decoration: none;
+        }
+        border: none;
+        background: none;
+        th {
+            text-align: center;
+            a {
+                text-decoration: none;
+            }
+        }
+        tr:nth-of-type(2n) {
+            background: none;
+        }
+        td.sat, td.sun, th.sat, th.sun {
+            color:#f37019;
+        }
+        td {
+            text-align: center;
+            border: 1px solid #fff;
+        }
+        td.today {
+            border: 1px solid #f37019;
+            border-radius: 50%;
+        }
+        td.new {
+            border: 2px solid black;
+            background-color:gray;
+            border-radius: 50%;
+            color:#fff;
+        }
+        td.full {
+            border: 2px solid black;
+            border-radius: 50%;
+        }
 
-
-
-
-div#title {
-    padding-top: 50px;
-    text-align: center;
-    h2 {
-        padding-bottom: 0px;
-        margin-bottom: 0px;
+        td.selected {
+            border: 1px solid #f37019;
+            border-radius: 50%;
+        }
     }
 }
+   
+div#biorythms_chart {
+    margin-bottom: 10px;
+    position:static;
+}
 
-div#content {
-    margin: 0 50px;
-    min-height: 300px;
-    text-align: center;
-    h2 {
-        padding-top: 0px;
-        margin-top: 0px;
+/* экраны */
+@media screen and (min-width: 1024px) {
+}
+/* планшеты */
+@media screen and (min-width: 700px) and (max-width: 1024px) {
+}
+/* телефоны */
+@media screen and (min-width: 320px) and (max-width: 700px) {
+    div.promo, div.calendar, #biorythms_chart {
+        display:none;
+    }
+    div.bio_info {
+        div.todayinfo{
+            @include grid-column(12, false);
+            margin:0px !important;
+            padding:20px;
+        }
     }
 }
-
-
-span.attention {
-    color: #e67869;
+/* хня какая-то */
+@media screen and (max-width: 320px) {
+    div.promo, div.calendar, #biorythms_chart {
+        display:none;
+    }
+    div.bio_info {
+        div.todayinfo{
+            @include grid-column(12, false);
+            margin:0px !important;
+            padding:10px;
+        }
+    }
 }
-
-div.biorithms {
-    font-size: 1.2em;
-}
-
-div.day_info {
-    font-size: 1.2em;
-    padding-top: 20px;
-}
-
 

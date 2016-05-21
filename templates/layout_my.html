@@ -1,0 +1,71 @@
+{% extends 'layout_fnd.html' %}
+{% load static %}
+
+{% block meta_title %}{% block meta_page_title %}{% endblock %} Дни силы{% endblock %}
+
+
+{% block meta_head %}
+    <link rel="stylesheet" href="{% static 'css/my.css' %}">
+    <script src="{% static "js/jquery.maskedinput.min.js" %}"></script>
+{% endblock %}
+
+
+{% block base_content %}
+<div class='side_bar'>
+    <div class="logo">
+        <h2>
+            <a  href='{% url 'home' %}'
+                alt='Дни силы'
+                title="Календарь дней силы">Дни силы</a>
+        </h2>
+    </div>
+
+    <h2 class='menu_title'>Инструменты познания</h2>
+    <div role="navigation" id="nav" class="nav-collapse">
+    <ul>
+        <li {% if service == 'numerology' %} class='active' {% endif %}>
+            <a  href='{% url 'num_home' %}'
+                alt='число рождения'
+                title="Расчет числа рождения">Нумерология&nbsp;дня&nbsp;рождения</a>
+        </li>
+        <li {% if service == 'biorythms' %} class='active' {% endif %}>
+            <a  href='{% url 'bio_home' %}'
+                alt='Биоритмы онлайн'
+                title="Расчет биоритмов">Биоритмы&nbsp;человека</a>
+        </li>
+        <li {% if service == 'moonbirthday' %} class='active' {% endif %}>
+            <a  href='{% url 'moonbirthday_home' %}'
+                title="лунный календарь рождения"
+                alt="Какой лунный день соответсвует рождению">Лунный&nbsp;день&nbsp;рождения</a>
+        </li>
+        <li {% if service == 'solar' %} class='active' {% endif %}>
+            <a  href='{% url 'solar_home' %}'
+                title="расчитать соляр дня рождения онлайн"
+                alt="астрология соляр онлайн">Дата&nbsp;открытия&nbsp;соляра</a>
+        </li>
+        <li {% if service == 'moonphases' %} class='active' {% endif %}>
+            <a  href='{% url 'moonphases_home' %}'
+                title="фаза луны сегодня"
+                alt="фазы луны">Фаза&nbsp;луны</a>
+        </li>
+        <li  {% if service == 'suntime' %} class='active' {% endif %}>
+            <a  href='{% url 'suntime_home' %}'
+                title="астрономический полдень и другие сервисы времени"
+                alt="астрономический полдень">Солнечное&nbsp;время</a>
+        </li>
+    </ul>
+    </div>
+</div>
+<div class='content' >
+    <div class='service_content' id='service_content'>
+        {% block content %}{% endblock %}
+        <div class='ad'>{% include "ad.html" %}</div>
+        <div class='footer'>
+            <div class='about'>
+                © 2014 - {% now "Y" %} Дни силы.
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

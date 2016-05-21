@@ -1,0 +1,27 @@
+{% extends 'suntime/layout.html' %}
+{% load static %}
+
+{% block meta_page_title %}{{article.text.title}}.{% endblock %}
+
+{% block meta_description %}{{ article.text.annonce }}{% endblock %}
+{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
+
+
+{% block og_meta %}
+    <meta property="og:title" content="{{ article.text.title }}" />
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/suntime_v.jpg" />
+<link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/suntime_v.jpg" />
+    <meta property="og:url" content="http://{{SITE_URL}}{% url 'suntime_article' article.name %}"/>
+    <meta property="og:type" content="article"/>
+    <meta property="og:type:article:section" content="Астрономия"/>
+{% endblock %}
+
+
+{% block text_content %}
+
+	<h1>{{ article.text.title }}</h1>
+
+    {% autoescape off %}
+        {{ article.text.content }}
+    {% endautoescape %}  
+{% endblock %}

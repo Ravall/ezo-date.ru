@@ -1,36 +1,68 @@
-@import "variable.scss";
-body {
-    div#form {
-        form {
-            padding-top: 0px;
-            div#element_city {
-                padding-bottom: 0px;
+@import "../foundation/scss/foundation.scss";
+
+div#text_content {
+    div#moon_phases {
+        @include grid-row();
+        
+        div.period{
+            @extend p;
+            padding-bottom:20px;
+        }
+        table {
+            tr.today {
+                td {
+                    font-weight:bold;
+                }
+            }
+            tr.new,tr.full {
+                td {
+                    color:#f37019;
+                }
             }
         }
     }
-    div#form_city {
-        display: none;
-    }
+}
 
-    @include media("max-width: 899px") {
-        div#text_content {
-            div.image {
-                text-align: center;
-                display: block;
-            }
+
+/* экраны */
+@media screen and (min-width: 1024px) {
+    div.period_today {
+            @include grid-column(7);
+            padding-top:50px;
+        }
+        div.next_period {
+            @include grid-column(5, true);
+        }
+}
+/* планшеты */
+@media screen and (min-width: 700px) and (max-width: 1024px) {
+    div.period_today {
+            @include grid-column(7);
+            padding-top:50px;
+        }
+        div.next_period {
+            @include grid-column(5, true);
+        }
+}
+/* телефоны */
+@media screen and (min-width: 320px) and (max-width: 700px) {
+    div.period_today, div.next_period {
+        @include grid-column(12);
+    }
+    div.next_period {
+        div.period {
+            text-align:center;
         }
     }
-
-
-    @include media("min-width: 900px") {
-
-
-        div#ul, div#ur, div#dr, div#dl {
-            background:none;
-            height:100%;
-            min-height: $size_content_height;
-            min-width: $size_content_width;
-            height: auto;
+}
+/* хня какая-то */
+@media screen and (max-width: 320px) {
+    div.period_today, div.next_period {
+        @include grid-column(12);
+    }
+    div.next_period {
+        div.period {
+            text-align:center;
         }
     }
 }

@@ -1,56 +1,63 @@
 {% extends 'moonphases/layout.html' %}
 {% load static %}
 {% load phases %}
+{% load snctdate %}
 
-{% block css %}
-    {{ block.super }}
-    <link type="text/css"
-        href="{% static "css/style-select.css" %}"
-        rel="stylesheet" charset="utf-8"/>
-{% endblock %}
+{% block meta_page_title %}Фаза луны на сегодня.{% endblock %} 
 
 
+ 
 
 
-{% block content %}
+{% block text_content %}
+<div id='moon_phases'>
 
 
+<div class='period_today'>
+  <p>  <h3>Сегодня {{now|snct_dateformat:"[d] [M2]"}}:<br/> {{moon_info.moon_day}}-й лунный день,<br/> {% alt_phase_period moon_info.today %}</h3></p>
+  
+  <p>
+  {% if moon_info.today == 'new' %}
+    Новолуние - время анализа прошлого и подробного планирования месяца. По возможности откажитесь от любой активности. 
+  {% elif moon_info.today == 'full' %}
+    Полнолуние - время сложных энергитических практик, время анализа и планирования. Энергия дня медитативная, избегайте принятия решений, инициативы.
+  {% elif moon_info.today == 'waning' %}
+    Убывающая луна - время заверешения начатых дел, что-то новое начинать в этот период нежелательно. Избавляться от чего-либо в своей жизни слеудет на убывающую луну
+  {% elif moon_info.today == 'waxing' %}
+    Растущая луна - время обретения и накопления. Начинать новые дела, осущесвтлять крупные приобретения, что-то менять в своей жизни следует на растущую луну.
+  {% endif %}
+  </p>
 
-<div id='text_content'>
-    <h2>{% alt_phase info.lunation %}</h2>
-    <div class="image">
-        <img src='{% get_static_prefix %}img/phases/{% img_phase_url info.lunation %}'
-            width='300px'
-            alt='{% alt_phase info.lunation %}'
-            title="{% alt_phase info.lunation %}">
-    </div>
-    <h1>Фаза луны для города <a class='context' href='#' id='show_city'>{{city}}</a></h1>
-    <div id='form_city'>
-        {% include 'user/form/citylive.html' %}
-    </div>
-    <div class='info'>
-        Следующее полнолуние: {{info.next_full_moon}}<br/>
-        Следующее новолуние: {{info.next_new_moon}}<br/>
-        Восход луны: {{info.previous_rising}}<br/>
-        Закат луны: {{info.next_setting}}<br/>
-        Лунный день: {{info.moon_day}}
-    </div>
-
-
-    {% autoescape off %}
-    {% endautoescape %}
 </div>
-<script type="text/javascript">
-    $('#form_city').hide();
-    $('#show_city').click(function() {
-        if ($('#form_city').is(':visible')) {
-            $('#form_city').hide();
-        } else {
-            $('#form_city').show();
-        }
-        return false;
-    })
 
-</script>
+
+<div class='next_period'>
+<p>
+{% if now > moon_info.periods.full.1 %}
+    <div class='period'> 
+        <b>Следующее&nbsp;новолуние:</b><br/>  {% phase_time moon_info 'next_periods' 'new' %}
+    </div>
+    <div class='period'>
+        <b>Следующее&nbsp;полнолуние:</b> <br/>{% phase_time moon_info 'next_periods' 'full' %}
+    </div>
+{% else %}
+    <div class='period'>
+        <b>Следующее&nbsp;полнолуние:</b> <br/> {% phase_time moon_info 'periods' 'full' %}
+    </div>
+    <div class='period'>
+        <b>Следующее&nbsp;новолуние:</b>  <br/>{% phase_time moon_info 'next_periods' 'new' %}
+    </div>
+{% endif %}
+</p>
+<div class='period'> 
+    <b>Луна сегодня:</b><br/>
+      Восход: {{moon_info.previous_rising|date:"H:i"}}<br/> 
+      Закат: {{moon_info.next_setting|date:"H:i"}} </p>
+      </div>
+  </div>
+
+</div>
+     
+     
 
 {% endblock %}

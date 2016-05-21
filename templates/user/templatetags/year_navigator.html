@@ -1,0 +1,11 @@
+<div class="navigator">
+	<ul>
+		<li> <a href='{% url route prev %}' alt='предыдущий год' title='предыдущий год'>&larr;</a></li>
+		{% for year in years %}
+			<li {% if current == year %} class='active' {% endif %}>
+				<a href='{% url route year %}' alt='{{year}} год' title='{{year}} год'>{{year}}</a>
+			</li>
+		{% endfor %}
+		<li> <a href='{% url route next %}' alt='следующий год' title='следующий год'>&rarr;</a></li>
+	</ul>
+</div>

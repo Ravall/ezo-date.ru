@@ -1,0 +1,28 @@
+{% extends 'moonphases/layout.html' %}
+{% load static %}
+{% load phases %}
+{% load snctdate %}
+
+{% block meta_page_title %}Фазы&nbsp;луны&nbsp;{{now|snct_dateformat:"[M2]"}}.{% endblock %} 
+
+
+{% block text_content %}
+
+<div id='moon_phases'>
+	<table>
+	<tr>
+		<td>Лунный день</td>
+		<td>Даты</td>
+		
+		<td>Фаза</td>
+	</tr>
+	{% for item in mooon_month %}
+	<tr class="{{item.today}}{% if item.periods.this_day.0 < now and now < item.periods.this_day.1 %} today{% endif %}">
+		<td>{{item.moon_day}}</td>
+		<td>{% phase_time item 'periods' 'this_day' %}</td>
+		<td>{% alt_phase_period item.today %}</td>
+	</tr>
+	{% endfor %}
+	</table>
+</div>
+{% endblock %}

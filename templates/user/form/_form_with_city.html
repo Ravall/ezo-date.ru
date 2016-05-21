@@ -1,6 +1,5 @@
 {% load static %}
 {% load moon %}
-{% load url from future %}
 
 
 <script type="text/javascript">
@@ -36,7 +35,7 @@
             {% block not_russia_links %}{% endblock %}
 
             <div id='button'>
-                <button type="submit">рассчитать</button>
+                <button type="submit">{{button|default:"рассчитать"}}</button>
             </div>
 
         </form>

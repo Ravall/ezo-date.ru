@@ -1,49 +1,58 @@
-{% extends 'layout.html' %}
+{% extends 'layout_my.html' %}
 {% load static %}
 
-{% block css %}
-    <link type="text/css" href="{% static "css/moonbirthday.css" %}" rel="stylesheet" charset="utf-8"/>
-    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+
+{% block meta_description %}Луна - это подсознание человека, его скрытые возможности, инстинкты, интуиция. Знания характеристики своего лунного дня рождения поможет понять себя {% endblock %}
+{% block meta_keywords %}лунный день рождения, характеристика, календарь рождения, календарь лунных дней, характеристика лунных дней{% endblock %}
+
+{% block meta_page_title %}Лунный день рождения.{% endblock %} 
+
+{% block og_meta %}
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/moon_birthday.png" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/moon_birthday.png" />
 {% endblock %}
 
-{% block meta_title %}Лунный день рождения: {% block page_title %}{% endblock %}{% endblock %}
 
 
-{% block base_content %}
-<div id='m_div'></div>
-<div id='ul'>
-    <div id='ur'>
-        <div id='dr'>
-            <div id='dl'>
-                <div id='menu'>
-                    <ul>
-                        <li>
-                            <a href='{% url 'home' %}'>&larr;&nbsp;другие&nbsp;сервисы</a>
-                        </li>
-                        <li {% if url == 'home' %}class='active'{% endif %}>
-                            <a
-                                href='{% url 'moon_birthday_home' %}'
-                            >лунный&nbsp;день&nbsp;рождения</a>
-                        </li>
-                        <li {% if url == 'all' %}class='active'{% endif %}>
-                            <a href='{% url 'moon_birthday_all_nums' %}'
-                                title="характеристика лунных дней"
-                                alt="лунные даты рождения"
-                            >характеристика&nbsp;лунных&nbsp;дней</a>
-                        </li>
-
-                    </ul>
-                </div>
-                {% block content %}{% endblock %}
-                {% include "ad.html" %}
-            </div>
-        </div>
+{% block content %}
+    <div class="promo">
+        <h1>{% block title %}Лунный день&nbsp;рождения{% endblock %}</h1>
+        {% block img %}
+            <img    src="{% static "img/moon_birthday.png" %}"
+                    alt='Лунный день рождения'
+                    title='Лунный день рождения. Характеристика' />
+        {% endblock %}
     </div>
-</div>
-
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'moonbirthday_home' %} class="active" {% endif %}>
+                <a  href='{% url 'moonbirthday_home' %}'
+                    alt="лунная дата рождения"
+                    title="Лунный день рождения">Лунный&nbsp;день&nbsp;</a>
+            </li>
+            <li {% if url == 'form' %} class="active" {% endif %}>
+                <a  href='{% url 'moonbirthday_form' %}'
+                    alt='Рассчитать лунный день'
+                    title="Расчитать лунный день рождения">Расчитать</a>
+            </li>
+            <li {% if url == 'my' %} class="active" {% endif %}>
+                <a  href='{% url 'moonbirthday_my_day' %}'
+                    alt='Какой лунный день'
+                    title="Мой лунный день">Мой&nbsp;лунный&nbsp;день</a>
+            </li>
+            <li {% if url == 'moonbirthday_nums' %} class="active" {% endif %}>
+                <a  href='{% url 'moonbirthday_nums' %}'
+                    alt='Характеристика лунных дней'
+                    title="Характеристика лунных дней">Лунные&nbsp;дни</a>
+            </li>
+        </ul>
+    </div>
+    {% block sub_navigator %}{% endblock %}
+    <div id='text_content'>{% block text_content %}{% endblock %}</div>
 {% endblock %}
 
-{% block block_js %}
-    <script type="text/javascript" src="{% static "js/jquery.mockjax.js" %}"></script>
-    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
-{% endblock %}
+
+
+
+
+

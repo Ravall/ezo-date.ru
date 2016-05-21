@@ -1,35 +1,38 @@
 {% extends 'solar/layout.html' %}
 {% load static %}
-{% load snctdate %}
 {% load solar %}
+{% load interface %}
+
+{% block meta_page_title %}Расшифровка 12 дней.{% endblock %}
 
 
-{% block page_title %}Дата открытия{% endblock %}
+{% block text_content %} 
 
 
-{% block content %}
 
-<div id='text_content'>
-    <div id='solar'>
-        <a href='{% url 'solar_open' city_id  b_dt year|add:-1 %}'>&larr;</a>
-        В {{year}} году
-        <a href='{% url 'solar_open' city_id b_dt year|add:1 %}'>&rarr;</a>
-        <br/> соляр {% past_future 'открылся' 'откроется' time %}
-    </div>
+    <h2>Дата открытия соляра на:</h2>
+    {% year_navigator 'solar_open_year' year %}
+    <h1>
+         {{solar_open_time }}
+    </h1>
 
-    <h1>Дата открытия соляра</h1>
-    <h2>{{time|snct_dateformat:"[d] [M2]"}}<br/>{{time|date:'G:i'}}</h2>
-    <div class='info'>по местному времени города гождения</div>
+<p>
+    Двенадцать следующих деней с {{solar_open_time}} закладывают программу на следующий год, поэтому проижить их нужно с полной осознанностью, следуя рекомендациям и борясь с искушениями.
+</p>
 
-    {% if article %}
-        <h2>Идет {{day}} день</h2>
-        <div class='info'>с момента открытия соляра</div>
-        <div class='article'>
-            {% autoescape off %}
-                {{ article.text.content }}
-            {% endautoescape %}
-        </div>
-    {% endif %}
-</div>
+
+
+<table>
+{% for day in days %}
+    <tr {% if day.current %} class='active' {% endif %}>
+        <td>день&nbsp;{{ forloop.counter }}</td>
+        <td>{{ day.date.0|date:"d.m"}}&nbsp;{{day.date.0|date:"H:i" }}&nbsp;-&nbsp;{{ day.date.1|date:"d.m"}}&nbsp;{{day.date.1|date:"H:i" }}</td>
+        <td><a href="{% url 'solar_day' day.article.name|url_to_num %}"
+                alt="{{ forloop.counter }} день с момента открытия соляра"
+                title="{{ forloop.counter }} день с момента открытия соляра"
+            >{{day.article.title}}</a></td>
+    </tr>
+{% endfor %}
+</table>
 
 {% endblock %}

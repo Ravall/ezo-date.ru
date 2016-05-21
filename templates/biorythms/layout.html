@@ -1,50 +1,64 @@
-{% extends 'layout.html' %}
+{% extends 'layout_my.html' %}
 {% load static %}
 
 
+{% block meta_description %}Биоритмы — природные циклы, которым подвержено все в природе. Рассчитав биоритмы, вы получите график, показывающий периоды повышенной и приниженной активности, пиковые точки ваших ритмов{% endblock %}
+{% block meta_keywords %}биоритмы человека, расчет биоритмов онлнайн, биоритмы по дате рождения{% endblock %}
+{% block meta_page_title %}Биоритмы человека.{% endblock %}
+
 {% block og_meta %}
-    <meta property="og:image" content="{% get_static_prefix %}img/biorythms.png" />
-    <link rel="image_src" href="{% get_static_prefix %}img/biorythms.png" />
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/biorythms.png" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/biorythms.png" />
 {% endblock %}
 
 
-{% block meta_description %}Луна - это подсознание человека, его скрытые возможности, инстинкты, интуиция. Знания характеристики своего лунного дня рождения поможет понять себя {% endblock %}
-{% block meta_keywords %}лунный день рождения, характеристика, календарь рождения, календарь лунных дней, характеристика лунных дней{% endblock %}
-
-
-
-{% block css %}
+{% block meta_head %}
+    {{ block.super }}
     <link
         type="text/css" rel="stylesheet"
-        href="{% static "css/morris-0.4.3.min.css" %}" charset="utf-8">
-    <link
-        type="text/css" rel="stylesheet"
-        href="{% static "css/biorythms.css" %}" charset="utf-8">
+        href="{% static "css/morris-0.5.1.min.css" %}" charset="utf-8">
+    <script src="{% static "js/raphael-min.js" %}"></script>
+    <script src="{% static "js/morris-0.5.1.min.js" %}"></script>
+    <link rel="stylesheet" href="{% static 'css/biorythms.css' %}">
 {% endblock %}
 
-{% block meta_title %}Биоритмы: {% block page_title %}{% endblock %}{% endblock %}
 
 
-{% block base_content %}
-<div id='top'></div>
-<div id='menu'>
-    <ul>
-        <li>
-            <a href='{% url 'home' %}'
-            tilt='эзотерика дня рождения'
-            alt='эзотерика дня рождения'>&larr; другие&nbsp;сервисы</a>
-        </li>
-        <li {% if url == 'bio_home' %}class='active'{% endif %}>
-            <a href='{% url 'bio_home' %}'
-                alt='Биоритмы человека'
-                title="Расчитать биоритмы">
-            расчет&nbsp;биоритмов</a>
-        </li>
-    </ul>
-</div>
-{% block content %}{% endblock %}
-{% include "ad.html" %}
-<div id='down'></div>
+{% block content %}
+    <div id='bio_header'>
+        <div>
+            <h1>{% block title %}Биоритмы человека{% endblock %}</h1>
+            {% block sub_navigator %}{% endblock %}
+        </div>
+        <div class='promo'>
+            {% block img %}
+                <img    src="{% static 'img/biorythms-promo.png' %}"
+                    alt='Биоритмы по дате рождения'
+                    title='Биоритмы человека' />
+            {% endblock %}
+        </div>
+    </div>
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'bio_home' %} class="active" {% endif %}>
+                <a  href='{% url 'bio_home' %}'
+                    alt="Биоритмы онлайн"
+                    title="Биоритмы человека">Биоритмы&nbsp;человека</a>
+            </li>
+            <li {% if url == 'form' %} class="active" {% endif %}>
+                <a  href='{% url 'bio_form' %}'
+                    alt='расчет биоритмов'
+                    title="расчет биоритмов по дате рождения">Расчитать</a>
+            </li>
+            <li {% if url == 'bio_result' %} class="active" {% endif %}>
+                <a  href='{% url 'bio_result' %}'
+                    alt='биоритмы онлайн'
+                    title="биоритмы по дате рождения">Мои&nbsp;биоритмы</a>
+            </li>
+
+        </ul>
+    </div>
+    {% block text_content %}{% endblock %}
 {% endblock %}
 
 

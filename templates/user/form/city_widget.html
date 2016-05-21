@@ -1,0 +1,17 @@
+{% load static %}
+{% load moon %}
+{{field}}
+
+
+	
+<link type="text/css" rel="stylesheet" href="{% static "css/jquery.autocomplete.css" %}" charset="utf-8">
+<script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+<script type="text/javascript">
+            
+	jQuery("#{{attrs.id}}").autocomplete({
+            serviceUrl: '{% url 'ajax_city_autocomplete' %}',
+            onSelect: function (data) {
+               jQuery("#{{attrs.id|next}}").val(data['data']);
+            }
+        })
+</script>

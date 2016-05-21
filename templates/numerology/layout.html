@@ -1,42 +1,57 @@
-{% extends 'layout.html' %}
+{% extends 'layout_my.html' %}
 {% load static %}
 
-{% block css %}
-    <link type="text/css" rel="stylesheet" href="{% static "css/numerology.css" %}" charset="utf-8">
-{% endblock %}
 
-{% block meta_title %}Нумерология: {% block page_title %}{% endblock %}{% endblock %}
+{% block meta_description %}Число рождения — одно из важнейших понятий в нумерологии. Расчет числа рождения определяет унаследованные черты характера - то, с чем человек приходит в мир.{% endblock %}
+{% block meta_keywords %}Число рождения, расчет числа рождения{% endblock %}
+
+{% block og_meta %}
+    
+    <meta property="og:title" content="Нумерология. Число рождения" />
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/birthday_num.jpg" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/birthday_num.jpg" />
+{% endblock %}{{site.domain}}
+
+{% block meta_page_title %}Нумерология.{% endblock %}
 
 
-{% block base_content %}
-<div id='ul'>
-    <div id='ur'>
-        <div id='dr'>
-            <div id='dl'>
-                <div id='menu'>
-                    <ul>
-                        <li>
-                            <a href='{% url 'home' %}'>&larr;&nbsp;другие&nbsp;сервисы</a>
-                        </li>
-                        <li {% if url == 'num_home' %}class='active'{% endif %}>
-                            <a href='{% url 'num_home' %}'
-                                title="число рождения"
-                                alt="рассчитать число рождения">
-                            число&nbsp;рождения</a>
-                        </li>
-                        <li {% if url == 'all_nums' %}class='active'{% endif %}>
-                            <a href='{% url 'all_nums' %}'
-                                title="все числа рождения"
-                                alt='посмотреть все числа рождения'>
-                            все&nbsp;числа&nbsp;рождения</a>
-                        </li>
-                    </ul>
-                </div>
-                {% block content %}{% endblock %}
-                {% include "ad.html" %}
-            </div>
-        </div>
+{% block content %}
+    <div class="promo">
+        <h1>{% block title %}Нумерология по дате рождения{% endblock %}</h1>
+        {% block img %}
+            <img    src="{% static 'img/birthday_num.png' %}"
+                    alt='Нумерология по дате рождения'
+                    title='Нумерология по дате рождения' />
+        {% endblock %}
     </div>
-</div>
-
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'num_home' %} class="active" {% endif %}>
+                <a  href='{% url 'num_home' %}'
+                    alt="нумерология по дате рождения"
+                    title="нумерология рождения">Число&nbsp;рождения</a>
+            </li>
+            <li {% if url == 'form' %} class="active" {% endif %}>
+                <a  href='{% url 'num_form' %}'
+                    alt='рассчитать число рождения'
+                    title="расчитать число рождения онлайн">Расчитать</a>
+            </li>
+            <li {% if url == 'my_num' %} class="active" {% endif %}>
+                <a  href='{% url 'num_result' %}'
+                    alt='нумерология рождения'
+                    title="нумерология по дате моего рождения">Мое&nbsp;число</a>
+            </li>
+            <li {% if url == 'all' %} class="active" {% endif %}>
+                <a  href='{% url 'all_nums' %}'
+                    alt='все числа рождения'
+                    title="числа рождения">Все&nbsp;числа&nbsp;рождения</a>
+            </li>
+        </ul>
+    </div>
+    {% block sub_navigator %}{% endblock %}
+    <div id='text_content'>{% block text_content %}{% endblock %}</div>
 {% endblock %}
+
+
+
+

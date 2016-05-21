@@ -1,0 +1,74 @@
+[
+  {
+    "model": "moonbirthday.SxgeoCities",
+    "pk": 487495,
+    "fields": {
+      "region_id": "578853",
+      "name_ru": "Стерлитамак",
+      "name_en": "Sterlitamak",
+      "lat": "53.62462",
+      "lon": "55.95015",
+      "okato": "80445"
+    }
+  },
+  {
+    "model": "moonbirthday.SxgeoCities",
+    "pk": 524901,
+    "fields": {
+      "region_id": "524894",
+      "name_ru": "Москва",
+      "name_en": "Moscow",
+      "lat": "55.75222",
+      "lon": "37.61556",
+      "okato": "45"
+    }
+  },
+  {
+    "model": "moonbirthday.SxgeoCities",
+    "pk": 524305,
+    "fields": {
+      "region_id": "524304",
+      "name_ru": "Мурманск",
+      "name_en": "Murmansk",
+      "lat": "68.97917",
+      "lon": "33.09251",
+      "okato": "47401"
+    }
+  },
+  {
+    "model": "moonbirthday.SxgeoRegions",
+    "pk": 524894,
+    "fields": {
+      "iso": "RU-MOW",
+      "country": "RU",
+      "name_ru": "Москва",
+      "name_en": "Moskva",
+      "timezone": "Europe/Moscow",
+      "okato": "45"
+    }
+  },
+  {
+    "model": "moonbirthday.SxgeoRegions",
+    "pk": 578853,
+    "fields": {
+      "iso": "RU-BA",
+      "country": "RU",
+      "name_ru": "Башкортостан",
+      "name_en": "Bashkortostan",
+      "timezone": "Asia/Yekaterinburg",
+      "okato": "80"
+    }
+  },
+  {
+    "model": "moonbirthday.SxgeoRegions",
+    "pk": 524304,
+    "fields": {
+      "iso": "RU-MUR",
+      "country": "RU",
+      "name_ru": "Мурманская область",
+      "name_en": "Murmanskaya Oblast'",
+      "timezone": "Europe/Moscow",
+      "okato": "47"
+    }
+  }
+]

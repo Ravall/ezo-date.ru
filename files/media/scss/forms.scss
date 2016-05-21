@@ -1,0 +1,47 @@
+@import "variable.scss";
+body {
+    div#form {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+
+        div.element {
+            padding-bottom: 20px;
+        }
+        input {
+            padding:0px;
+            margin: 0px;
+
+        }
+        form {
+            padding-top: 50px;
+        }
+
+    }
+
+
+
+    @include media("max-width: 899px") {
+        div#form {
+            input {
+
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+    }
+    @include media("min-width: 900px") {
+        div#form {
+            width: 400px;
+            input#id_city {
+                width: 400px;
+            }
+            select {
+                width: 387px;
+            }
+
+        }
+
+    }
+}

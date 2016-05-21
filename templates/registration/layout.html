@@ -1,0 +1,25 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block css %}
+    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/forms.css" %}" charset="utf-8">
+    <link type="text/css" rel="stylesheet" href="{% static "css/registration.css" %}" charset="utf-8">
+    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+{% endblock %}
+
+
+{% block og_meta %}
+    <meta name="robots" content="none"/>
+    <meta name="robots" content="noindex">
+{% endblock %}
+
+{% block base_content %}
+
+{% include "registration/_auth_header.html" %}
+
+<div id='text_content'>
+  <h2>{% block content_title %}Регистрация{% endblock %}</h2>
+  {% block content %}{% endblock %}
+</div>
+{% endblock %}
+

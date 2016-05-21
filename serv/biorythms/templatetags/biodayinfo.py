@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django import template
-from biorythms.models import (
+from user.service.biorythms import (
     PHYSICAL_PERIOD, EMOTIONAL_PERIOD, BRAIN_PERIOD,
     DAY_TYPE_PEAK, DAY_TYPE_GREAT_CRITICAL, DAY_TYPE_CRITICAL
 )

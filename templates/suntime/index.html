@@ -1,0 +1,21 @@
+{% extends 'suntime/layout.html' %}
+{% load static %}
+
+
+{% block text_content %}
+
+<p>
+Разница между солнечным и общепринятым временем: {{sun_info.diff_datetime}}<br/>
+</p>
+
+<h2>Режим дня по солнечному времени</h2>
+<p>
+Просыпаться нужно не позднее: {{sun_info.time_to_wakeup|date:"H:i"}}<br/>
+Идеальное время для обеда: {{sun_info.time_to_lunch|date:"H:i"}}<br/>
+Идеальное время для ужина: {{sun_info.time_to_dinner|date:"H:i"}}<br/>
+Засыпать не позднее: {{sun_info.time_to_sleep|date:"H:i"}}<br/>
+</p>
+
+
+    
+{% endblock %}

@@ -1,0 +1,67 @@
+{% extends 'layout_my.html' %}
+{% load static %}
+{% load snctdate %}
+{% load phases %}
+
+
+{% block meta_page_title %}Режим дня по солнцу.{% endblock %}
+{% block meta_description %}Режим дня это важно: если ложиться спать, просыпатья и питаться в соответсвии с солнечными ритами вы почувствуете гармонию с природой, у вас будет больше сил и энергии в течение дня. Сервис высчитывает отклонение от солнечного полдня{% endblock %}
+{% block meta_keywords %}Реальное время, солнечный полдень, режим дня, гражданское время{% endblock %}
+
+{% block og_meta %}
+    <meta property="og:image" content="http://{{SITE_URL}}{% get_static_prefix %}img/suntime_v.jpg" />
+    <link rel="image_src" href="http://{{SITE_URL}}{% get_static_prefix %}img/suntime_v.jpg" />
+{% endblock %}
+
+
+{% block meta_head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/suntime.css' %}">
+{% endblock %}
+
+
+
+
+{% block content %}
+    <div class="promo">
+        <h1>{% block title %} Солнечное время для города <a alt='солнечный режим дня для города {{city}}' title='режим дня для выбранного города' href='{% url 'suntime_city' %}'>{{city}}</a> {% endblock %}</h1>
+        {% block img %}
+        <div id='clock'>
+            <canvas height="280" width="280" id="realtime" >
+                Расчет астрономического полдня
+            </canvas>
+        </div>
+        {% endblock %}
+    </div>
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'suntime_home' %} class="active" {% endif %}>
+                <a alt='истинный полдень' title='солнечный режим дня сегодня' href='{% url 'suntime_home' %}'>Режим&nbsp;дня</a>
+            </li>
+            <li {% if url == 'suntime_articles' %} class="active" {% endif %}>
+                <a alt='как жить по солнечным ритмам' title='жить по солнцу. режим дня' href='{% url 'suntime_articles' %}'>О&nbsp;суточных&nbsp;ритмах</a>
+            </li>
+        </ul>
+    </div>
+
+    {% block sub_navigator %}{% endblock %}
+    <div id='text_content'>{% block text_content %}{% endblock %}</div>
+{% endblock %}
+
+
+
+
+{% block block_js %}
+<script type="text/javascript">
+    var CBackground = '#FFF';
+    var CColor = '#000';
+    var CSeconds='#FFF';
+</script>
+
+<script type="text/javascript" src='{% static 'js/promo.js' %}'></script>
+
+<script type="text/javascript">
+  loadClock('realtime',{{sun_info.diff_second}});
+</script>
+{% endblock %}
+

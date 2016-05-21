@@ -1,35 +1,31 @@
 {% extends 'solar/layout.html' %}
-
 {% load static %}
 {% load solar %}
-{% load url from future %}
 
-{% block page_title %}Расшифровка 12 дней.{% endblock %}
+{% block meta_page_title %}12 дней после дня рождения (открытия соляра).{% endblock %} 
 
 
-{% block og_meta %}
-    <meta property="og:image" content="{% get_static_prefix %}img/sun-vintage.png" />
-    <link rel="image_src" href="{% get_static_prefix %}img/sun-vintage.png" />
-{% endblock %}
-
-{% block content %}
-
-<div id='text_content'>
-    <div class="image">
+{% block img %}
         <img src="{% static "img/sun-vintage.png" %}"
             alt='12 дней. Дома соляра'
-            tilte='Соляр. Расчет даты открытия онлайн'
+            title='Соляр. Расчет даты открытия онлайн'
         >
-    </div>
-    <div class='nums_list'>
+{% endblock %}
+
+{% block text_content %}
+<p>
+Двенадцать следующих деней с момента открытия Соляра закладывают программу на следующий год, поэтому проижить их нужно с полной осознанностью, следуя рекомендациям и борясь с искушениями.
+</p>
+<div class='list'>
+<ul>
     {% for article in articles %}
-        <div>
+        <li>
             <a href="{% url 'solar_day' article.name|url_to_num %}"
                 alt="{{ forloop.counter }} день с момента открытия соляра"
                 title="{{ forloop.counter }} день с момента открытия соляра"
             >{{article.title}}</a>
-        </div>
+        </li>
     {% endfor %}
-    </div>
+</ul>
 </div>
 {% endblock %}

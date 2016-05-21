@@ -1,0 +1,38 @@
+@import "variable.scss";
+
+div.circle {
+    padding-top: 70px;
+    width: 400px;
+    height: 400px;
+    background: url('/static/img/fon_min.png') no-repeat center center;
+}
+
+
+div.circle {
+    margin-left: auto;
+    margin-right: auto;
+
+    text-align:center;
+    div.num {
+        line-height:65px;
+        font-family: $font_H;
+        font-size: 1.1em;
+        div#link {
+            line-height: 14px;
+            padding-top: 0px;
+            text-align:center;
+        }
+        h2,h1 {
+            color: $color_main;
+            padding: 0px;
+            margin: 0px;
+            padding-top: 70px;
+            font-size: 8em;
+            font-weight: bold;
+        }
+        h2.error {
+            font-size: 5em;
+            color: $color_error;
+        }
+    }
+}

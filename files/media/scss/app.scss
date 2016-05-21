@@ -1,0 +1,473 @@
+@import "../foundation/scss/foundation.scss";
+
+/* общее */
+@mixin full() {
+    width: 100%;
+    max-width: 100%;
+}
+
+
+body{
+    h2 {
+        font-size: 20px;
+        text-transform: uppercase;
+        font-family: Verdana, Geneva, sans-serif;
+    }
+    font-family: Verdana, Geneva, sans-serif;
+    div.about_project {
+        padding-bottom: 50px;
+        background-color: #26292c;
+        color: #f1f2f2;
+        position: relative;
+        @include grid-row();
+        @include full();
+        h1 {
+            color: #f1f2f2;
+            text-transform: uppercase;
+            font-family: Verdana, Geneva, sans-serif;
+        }
+        div.about{
+            float: none;
+        }
+        div.buttons {
+            @include grid-row();
+            @include full();
+            @include grid-column(12, true);
+        }
+        div.links{
+            text-align: right;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            @include grid-column(4, true, false, 8);
+            font-size: 11px;
+            margim-bottom: 50px;
+            border-bottom: 1px solid #f37019;
+            word-spacing: 20px;
+            a {
+                text-decoration: underline;
+                color: #fff;
+                &:hover {
+                    color:#7f8c8d;
+                }
+            }
+        }
+    }
+
+
+    div.widgets {
+        background-color: #2980b9;
+        h2 {
+            color: #FFF;
+            padding-bottom: 10px;
+        }
+        @include grid-row();
+        @include full();
+
+        div.clock {
+            text-align: center;
+        }
+
+        div.moon {
+            text-align: center;
+            img {
+                padding-bottom: 22px;
+            }
+        }
+        div.info {
+            color:#FFF;
+        }
+        a {
+            color:#f39c12;
+            text-decoration:underline;
+            &:hover {
+                color:#f37019;
+            }
+        }
+    }
+
+    div.tools_cognition {
+        text-align: center;
+        @include grid-row();
+        @include full();
+        a {
+            text-decoration: underline;
+        }
+        div.service {
+            img {
+                width: 150px;
+            }
+            div.about {
+                text-align: left;
+                @include grid-column(10, true, false, 1,1,0);
+                font-size: 12px;
+            }
+        }
+    }
+
+    div.comeon {
+        @include grid-row();
+        @include full();
+        color: #f1f2f2;
+        text-align: center;
+        padding-top: 50px;
+        padding-bottom: 50px;
+        background-color: #26292c;
+        h2 {
+            color: #f1f2f2;
+            font-family: Verdana, Geneva, sans-serif;
+        }
+        div.about {
+            padding-top: 10px;
+            @include grid-row();
+            @include full();
+            @include grid-column(8, true, false, 2,0,0);
+        }
+        div.buttons {
+            padding-top: 30px;
+            @include grid-row();
+            @include full();
+            @include grid-column(12, true);
+        }
+    }
+
+    div.footer {
+        @include grid-row();
+        @include full();
+        background-color: #26292c;
+        color: #f1f2f2;
+        text-align: left;
+        font-size: 12px;
+        div.about {
+            border-top: 1px solid #f37019;
+            padding-top: 10px;
+        }
+        
+    }
+
+    div.ad {
+        background-color: #26292c;
+        text-align: center;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+}
+
+
+/* экраны */
+@media screen and (min-width: 1024px) {
+    div.about_project {
+        background-image: url('/static/img/solar_eclipse_orig.jpg');
+        background-repeat: no-repeat;
+        background-position: right center;
+        h1 {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        padding-left: 50px;
+        
+        div.about{
+            @include grid-column(5, true, false, 7, 0, 7);
+            padding-top: 50px;
+        }
+
+        div.buttons {
+            padding-top: 50px;
+            a {
+                margin-right: 60px;
+
+            }
+        }
+    }
+
+    div.calendar {
+        @include grid-row();
+        @include full();
+        div.calendar {
+            @include grid-column(5, false, false, 1);
+            table {
+                padding-top: 70px;
+                border: none;
+                background: none;
+                tr:nth-of-type(2n) {
+                    background: none;
+                }
+                td.sat, td.sun, th.sat, th.sun {
+                    color:#f37019;
+                }
+                td {
+                    text-align: center;
+                }
+                td.today {
+                    border: 1px solid #f37019;
+                    border-radius: 50%;
+                }
+            }
+        }
+        div.about {
+            padding-top: 100px;
+            @include grid-column(5, true, false, 1, 0, 1);
+        }
+        padding-bottom:50px;
+    }
+
+    div.widgets {
+        padding-top: 100px;
+        padding-bottom: 100px;
+        div.clock {
+            @include grid-column(6, false);
+        }
+        div.moon {
+            @include grid-column(6, true);
+        }
+    }
+
+    div.tools_cognition {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        div.service {
+            @include grid-column(4, false);
+            height: 400px;
+        }
+    }
+
+    div.footer {
+        div.about {
+            @include grid-column(3, false, false, 1);
+        }
+        
+    }
+}
+
+/* планшеты */
+@media screen and (min-width: 700px) and (max-width: 1024px) {
+
+    div.about_project {
+        background-image: url('/static/img/solar_eclipse_orig.jpg');
+        background-repeat: no-repeat;
+        background-position: right center;
+        h1 {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+        padding-left: 50px;
+        div.about{
+            @include grid-column(5, true, false, 7, 0, 7);
+            padding-top: 50px;
+        }
+        div.buttons {
+            padding-top: 50px;
+            a {
+                margin-right: 60px;
+
+            }
+        }
+        
+    }
+
+    div.calendar {
+        @include grid-row();
+        @include full();
+        div.calendar {
+            @include grid-column(5, false, false, 1);
+            table {
+                padding-top: 70px;
+                border: none;
+                background: none;
+                tr:nth-of-type(2n) {
+                    background: none;
+                }
+                td.sat, td.sun, th.sat, th.sun {
+                    color:#f37019;
+                }
+                td {
+                    text-align: center;
+                }
+                td.today {
+                    border: 1px solid #f37019;
+                    border-radius: 50%;
+                }
+            }
+        }
+        div.about {
+            padding-top: 100px;
+            @include grid-column(5, true, false, 1, 0, 1);
+        }
+        padding-bottom:50px;
+    }
+
+    div.widgets {
+        padding-top: 100px;
+        padding-bottom: 100px;
+        
+        div.clock {
+            @include grid-column(6, false);
+        }
+        div.moon {
+            @include grid-column(6, true);
+        }
+    }
+
+    div.tools_cognition {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        div.service {
+            padding-top:30px;
+            @include grid-column(6, false);
+        }
+    }
+
+    div.footer {
+        div.about {
+            @include grid-column(6, false, false, 1);
+        }
+        
+    }
+
+}
+
+/* телефоны */
+@media screen and (min-width: 320px) and (max-width: 700px) {
+
+    div.about_project {
+        background-image: url('/static/img/solar_eclipse_orig.jpg');
+        background-repeat: no-repeat;
+        background-position: center  top;
+        h1 {
+            padding-bottom: 250px;
+        }
+
+        padding-left: 50px;
+        padding-right: 50px;
+        div.about{
+            text-align:center;
+        }
+        div.buttons {
+            padding-top: 2  0px;
+            text-align:center;
+        }
+        
+    }
+
+    div.calendar {
+        @include grid-row();
+        @include full();
+        div.calendar {
+            margin: auto;
+            width:300px;
+            table {
+                border: none;
+                background: none;
+                tr:nth-of-type(2n) {
+                    background: none;
+                }
+                td.sat, td.sun, th.sat, th.sun {
+                    color:#f37019;
+                }
+                td {
+                    text-align: center;
+                }
+                td.today {
+                    border: 1px solid #f37019;
+                    border-radius: 50%;
+                }
+            }
+        }
+        div.about {
+            margin: auto;
+            width:300px;
+        }
+        padding-bottom:50px;
+    }
+
+    div.widgets {
+        padding: 50px;
+        div.moon {
+            padding-top: 50px;
+        }
+       
+    }
+
+    div.tools_cognition {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        div.service {
+            padding-top:50px;
+            @include grid-column(12, false);
+        }
+    }
+
+    div.footer {
+        div.about {
+            @include grid-column(12, false);
+        }
+        
+    }
+}
+
+
+/* хня какая-то */
+@media screen and (max-width: 320px) {
+    div.about_project {
+        h1 {
+            padding-bottom: 20px;
+        }
+        padding-left: 10px;
+        padding-right: 10px;
+        div.about{
+            padding-top: 10px;
+        }
+        div.buttons {
+            padding-top: 50px;
+            a {
+                margin-right: 60px;
+
+            }
+        }
+    }
+
+    div.calendar {
+        @include grid-row();
+        @include full();
+        padding-left: 10px;
+        padding-right: 10px;    
+        div.calendar {
+            display:none;
+        }
+        padding-bottom:50px;
+    }
+
+    div.widgets {
+        padding: 10px;
+        div.clock {
+            canvas {
+                display:none;
+            }
+        }
+        div.moon {
+            padding-top: 20px;
+            img {
+                display:none;
+            }
+        }
+        
+    }
+
+    div.tools_cognition {
+        padding-top: 50px;
+        padding-bottom: 50px;
+        div.service {
+            padding-top:50px;
+            @include grid-column(12, false);
+        }
+        
+    }
+
+    div.footer {
+        div.about {
+            @include grid-column(12, false);
+        }
+    }
+
+}
+

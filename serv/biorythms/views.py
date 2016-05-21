@@ -1,106 +1,166 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render_to_response
-from django.template import RequestContext
-from django.shortcuts import redirect
-from django.http import Http404
 import json
-from numerology.models import BirthdayForm
-from datetime import datetime, timedelta, date
-
-from django.core.urlresolvers import reverse
-
-from dateutil.relativedelta import relativedelta
-
-from pytils import dt as pytils_dt
-from snct_date.date import month_range
-from biorythms.models import (
-    bio, git_important_days, day_bio,
-    PHYSICAL_PERIOD, EMOTIONAL_PERIOD, BRAIN_PERIOD
-)
+from datetime import  date
 from serv.service import api_request
-
-def index(request):
-
-    content = api_request(
-        'sancta/article/{0}.json'.format('biorythms_about')
-    )
-    content = json.loads(content)
-
-    if request.method == 'POST':
-        birthday_form = BirthdayForm(request.POST)
-        if birthday_form.is_valid():
-            birthday = datetime.strptime(
-                birthday_form.cleaned_data['date'], '%d.%m.%Y'
-            ).strftime('%Y-%m-%d')
-            request.session['birthday'] = birthday_form.cleaned_data['date']
-            return redirect('bio_birthday', birthday=birthday)
-    else:
-        birthday_form = BirthdayForm(initial={'date':request.session.get('birthday')})
-
-    return render_to_response(
-        'biorythms/index.html',
-        {
-            'url': 'bio_home',
-            'form': birthday_form,
-            'content': content
-        },
-        context_instance=RequestContext(request)
-    )
+from django.views.generic.edit import ProcessFormView
+from django.views.generic import TemplateView
+from serv.views import (
+    ApiRequestMixin, BirthDayFormMixin, SessionMixin,
+    HttpResponse303, AjaxTemplateMixin
+)
+from django.core.urlresolvers import reverse_lazy
+from django.http import HttpResponseRedirect
+from user.service import biorythms as bio_service
+from snct_date.date import (
+    today, day_maps, yyyy_mm_dd, date_shift, num_days_in_month
+)
+import calendar
 
 
+calendar.month_name = calendar._localized_month("%OB")
 
-def biorythm(request, birthday, cur_date=None):
+
+class MyHtmlCalendar(calendar.LocaleHTMLCalendar):
     today = date.today()
-    try:
-        #распарсим дату дня рождния
-        birthday_dt = datetime.strptime(birthday, '%Y-%m-%d').date()
-        if cur_date:
-            # если день на который нужно расчитать установлен,
-            # то распарсим его
-            cur_date = datetime.strptime(cur_date, '%Y-%m-%d').date()
+
+
+    def formatday(self, day, weekday):
+        css = [self.cssclasses[weekday]]
+        if (
+            day == self.today.day and
+            self.today.month == self.month and
+            self.today.year == self.year
+        ):
+            css.append('today')
+
+        if self.current_date == [day, self.month, self.year]:
+            css.append('selected')
+
+        if day == 0:
+            return '<td class="noday">&nbsp;</td>'
         else:
-            # если день на который нужно расчитать не установлен
-            # то будем считать на сегодня
-            cur_date = today
-    except ValueError:
-        raise Http404()
-    begin_date, end_date = month_range(cur_date)
-    data = [
-        {
-            'day': (
-                birthday_dt+timedelta(days=t)
-            ).strftime('%Y-%m-%d'),
-            'fiz': int(bio(t, 23)),
-            'emo': int(bio(t, 28)),
-            'smart': int(bio(t, 33)),
-        }
-        for t in xrange(
-            (begin_date - birthday_dt).days,
-            (end_date - birthday_dt).days
-        )
-    ]
-
-    critical_days = git_important_days(birthday_dt, begin_date, end_date)
-
-    try:
-        curday_info = critical_days[cur_date]
-    except:
-        curday_info = {
-            'biorythms': day_bio(
-                (cur_date - birthday_dt).days
+            return (
+                '<td class="%s">'
+                '<a class="get_bio_data" day="%s" href="#">%d</a>'
+                '</td>'
+            ) % (
+                ' '.join(css),
+                yyyy_mm_dd((day, self.month, self.year)),
+                day
             )
-        }
 
-    return render_to_response(
-        'biorythms/biorythm.html',
-        {
-            'birthday': birthday_dt,
-            'today_date': cur_date,
-            'today_info': curday_info,
-            'data': json.dumps(data),
-            'critical_days': critical_days,
-            'real_today':today,
-            'url': 'bio_home',
-        },
-        context_instance=RequestContext(request)
-    )
+
+    def formatmonthname(self, theyear, themonth, withyear=True):
+        with calendar.TimeEncoding(self.locale) as encoding:
+            s = calendar.month_name[themonth]
+            if encoding is not None:
+                s = s.decode(encoding)
+            if withyear and theyear != self.today.year:
+                s = '%s, %s' % (s, theyear)
+            prev_month_day = yyyy_mm_dd(
+                date_shift(1, themonth, theyear, -1)
+            )
+            next_month_day = yyyy_mm_dd(
+                date_shift(
+                    num_days_in_month(themonth,theyear),
+                    themonth, theyear, 1
+                )
+            )
+            return (
+                '<tr><th colspan="7" class="month">'
+                '<a href="#" day="%s" class="get_bio_data">&larr;</a> '
+                '%s'
+                ' <a href="#" day="%s" class="get_bio_data">&rarr;</a>'
+                '</th></tr>'
+            )% (prev_month_day, s, next_month_day)
+
+
+    def formatmonth(self, theyear=today.year, themonth=today.month, withyear=True):
+        self.year = theyear
+        self.month = themonth
+        return super(MyHtmlCalendar, self).formatmonth(theyear, themonth, withyear)
+
+
+class BiorythmsMixin(TemplateView):
+    url = ''
+
+
+    def get_context_data(self, **kwargs):
+        kwargs.setdefault('service', 'biorythms')
+        kwargs.setdefault('url', self.url)
+        return super(BiorythmsMixin, self).get_context_data(**kwargs)
+
+
+class IndexView(ApiRequestMixin, BiorythmsMixin):
+    template_name = 'biorythms/index.html'
+    url = 'bio_home'
+
+
+    def get_context_data(self, **kwargs):
+        context = super(IndexView, self).get_context_data(**kwargs)
+        context.update({
+            'content': self.api_get_article('biorythms_about')
+        })
+        return context
+
+
+class BioFormView(BirthDayFormMixin, ProcessFormView, BiorythmsMixin, SessionMixin):
+    template_name = 'biorythms/form.html'
+    url = 'form'
+
+
+    def form_valid(self, form):
+        self.save_value('date', 'date', form)
+        return HttpResponseRedirect(
+            reverse_lazy(
+                'bio_result'
+            )
+        )
+
+
+class BioResult(BiorythmsMixin, SessionMixin):
+    template_name = 'biorythms/biorythm.html'
+    url = 'bio_result'
+    current_date = today()
+    today = yyyy_mm_dd(today())
+
+
+    def get(self, request, *args, **kwargs):
+        return super(BioResult, self).get(request, *args, **kwargs) \
+            if self.get_value('date') \
+            else HttpResponse303(reverse_lazy(
+                'bio_form'
+            ))
+
+
+    def get_context_data(self, **kwargs):
+        context = super(BioResult, self).get_context_data(**kwargs)
+        date_bd = self.get_value('date').split('.')
+        bio_context = bio_service.get_bio_context(
+            self.get_value('date').split('.'),
+            self.current_date
+        )
+        bio_context['data'] = json.dumps(bio_context['data'])
+        context.update(bio_context)
+        context.update({'date_map':
+            {k: yyyy_mm_dd(v) for k,v in day_maps(self.current_date).items()}
+        })
+        myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU')
+        myCal.current_date = self.current_date
+        context.update({
+            'today':self.today,
+            'calendar':myCal.formatmonth(self.current_date[2], self.current_date[1])
+        })
+        return context
+
+
+class AjaxGetData(BioResult):
+    template_name = 'biorythms/bio_info.html'
+
+
+    def get_context_data(self, **kwargs):
+        self.current_date = map(int, self.request.GET['day'].split('-')[::-1])
+        context = super(AjaxGetData, self).get_context_data(**kwargs)
+        return context
+
+

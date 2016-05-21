@@ -1,0 +1,22 @@
+{% extends 'user/form/_form_with_city.html' %}
+{% block not_russia_links %}
+<div class='element'>
+    <a href='#'
+        id='detail_city'
+        title="рассчитать дни силы для города другой страны"
+        alt='рассчитать дни силы для города другой страны'>
+    Я родился не в России</a>
+    <div id='detail_form'>
+        <div>
+            <a href='#'
+                id='simple_search'
+                title="рассчитать дни силы для города в России"
+                alt='рассчитать дни силы для города в России'>
+            Я родился в России</a>
+        </div>
+        <div class='information'>
+            Если в подробном поиске города, вы не можете найти свой город - укажите ближайший
+        </div>
+    </div>
+</div>
+{% endblock %}

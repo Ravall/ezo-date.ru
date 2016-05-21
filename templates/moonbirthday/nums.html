@@ -1,0 +1,21 @@
+{% extends 'moonbirthday/layout.html' %}
+{% load static %}
+{% load moon %}
+
+{% block meta_page_title %}Лунные числа рождения{% endblock %}
+
+
+{% block text_content %}
+<div class='list left_list'>
+<ul>
+    {% for article in articles %}
+        <li>
+            <a href="{% url 'moonbirthday_one_num' article.name|url_to_digit %}"
+                alt="{{article.name|url_to_digit}} лунный день рождения"
+                title="{{article.name|url_to_digit}} лунный день рождения. Характеристика"
+            >{{article.title}}</a>
+        </li>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}
