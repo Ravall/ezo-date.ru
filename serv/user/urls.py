@@ -6,7 +6,7 @@ from user.views import AjaxCity
 
 urlpatterns = patterns('',
 #    url(r'^registration$', RegView.as_view(), name='user_registration'),
-    url(r'^avatar/', include('avatar.urls')),
+#    url(r'^avatar/', include('avatar.urls')),
     url(r'^ajax/city$', AjaxCity.as_view(), name='ajax_city_autocomplete'),
 )
 

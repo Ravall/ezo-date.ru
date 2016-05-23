@@ -131,7 +131,7 @@ INSTALLED_APPS = (
     #favion
     'favicon',
     ###
-    'avatar',
+#    'avatar',
     ###
     'serv',
     'biorythms',
@@ -153,9 +153,9 @@ INSTALLED_APPS = (
 
 )
 
-TEST_NON_SERIALIZED_APPS = (
-    'avatar',
-)
+#TEST_NON_SERIALIZED_APPS = (
+#    'avatar',
+#)
 
 ACCOUNT_ACTIVATION_DAYS = 2
 REGISTRATION_AUTO_LOGIN = False
