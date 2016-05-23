@@ -27,7 +27,7 @@ if DEBUG:
     path = os.path.realpath('../snct_date')
     sys.path.append(path)
 else:
-    sys.path.append('/home/web/snct_date')
+    sys.path.append('/home/www/snct_date')
 
 
 
