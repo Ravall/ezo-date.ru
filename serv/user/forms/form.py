@@ -5,7 +5,7 @@ from moonbirthday.forms.validator import validator_city
 from django_mobile import get_flavour
 from user.forms.elements.widgets import DateBornMobile, TimeBornMobile
 from user.forms.elements.fields import DateElement, TimeElement, CityElement
-from registration.forms import RegistrationForm
+#from registration.forms import RegistrationForm
 from django.contrib.auth.forms import UserCreationForm
 from collections import OrderedDict
 from django.contrib.auth.models import User

@@ -6,7 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from frontend.views import Index
 from django.views.generic import TemplateView
 from django.views.defaults import page_not_found, server_error
-from serv.sitemap import site_map
+
 from frontend.v2 import V2
 
 
@@ -27,7 +27,6 @@ urlpatterns = patterns('',
     url(r'', include('robots_txt.urls')),
     url(r'^', include('favicon.urls')),
 
-    url(r'^sitemap\.xml$', site_map),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^geoip/', include('django_geoip.urls')),
 
