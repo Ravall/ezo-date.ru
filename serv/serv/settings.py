@@ -133,6 +133,7 @@ INSTALLED_APPS = (
     ###
 #    'avatar',
     ###
+    'user',
     'serv',
     'biorythms',
     'numerology',
@@ -146,7 +147,7 @@ INSTALLED_APPS = (
     'django_geoip',
     'snct_date',
     'django_mobile',
-    'user',
+    
     'frontend',
     'services'
 

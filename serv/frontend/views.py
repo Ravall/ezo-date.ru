@@ -53,7 +53,7 @@ class Index(TemplateView, SessionMixin):
 
 
     def get_context_data(self, **kwargs):
-        myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU.utf8')
+        myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_ru')
         clndr =  myCal.formatmonth()
 
 

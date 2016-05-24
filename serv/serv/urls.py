@@ -6,7 +6,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from frontend.views import Index
 from django.views.generic import TemplateView
 from django.views.defaults import page_not_found, server_error
-
+from user.views import AjaxCity
 from frontend.v2 import V2
 
 
@@ -33,6 +33,7 @@ urlpatterns = patterns('',
 #    url(r'^404/$', page_not_found),
 #    url(r'^500/$', server_error)
 
+    url(r'^ajax/city$', AjaxCity.as_view(), name='ajax_city_autocomplete'),
 )
 
 if settings.DEBUG:

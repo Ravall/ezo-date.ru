@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from user.views import AjaxCity
 
+
 urlpatterns = patterns('',
 #    url(r'^registration$', RegView.as_view(), name='user_registration'),
 #    url(r'^avatar/', include('avatar.urls')),
