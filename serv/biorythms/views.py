@@ -145,7 +145,7 @@ class BioResult(BiorythmsMixin, SessionMixin):
         context.update({'date_map':
             {k: yyyy_mm_dd(v) for k,v in day_maps(self.current_date).items()}
         })
-        myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU')
+        myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU.utf8')
         myCal.current_date = self.current_date
         context.update({
             'today':self.today,
