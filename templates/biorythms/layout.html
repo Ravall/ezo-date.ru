@@ -55,10 +55,15 @@
                     alt='биоритмы онлайн'
                     title="биоритмы по дате рождения">Мои&nbsp;биоритмы</a>
             </li>
+            <li {% if url == 'biorythms_articles' %} class="active" {% endif %}>
+                <a  href='{% url 'bio_articles' %}'
+                    alt='биоритмы теория, статьи'
+                    title="Теория трех ритмов">Статьи</a>
+            </li>
 
         </ul>
     </div>
-    {% block text_content %}{% endblock %}
+    <div id='text_content'>{% block text_content %}{% endblock %}</div>
 {% endblock %}
 
 

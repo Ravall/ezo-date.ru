@@ -15,15 +15,15 @@
         <ul>
             <li class='period23'>
                 <span class='period23'>&mdash;&nbsp;</span>
-                Физический биоритм: {{ today_info|biorithm:23|safe }}
+                <a title='описание физического биоритма' alt='физический биоритм' href='{% url 'bio_article' 'fizicheskiy_bioritm' %}'>Физический биоритм</a>: {{ today_info|biorithm:23|safe }}
             </li>
             <li>
                 <span class='period28'>&mdash;&nbsp;</span>
-                Эмоциональный биоритм: {{ today_info|biorithm:28|safe}}
+                <a title='описание эмоционального биоритма' alt='Эмоциональный биоритм' href='{% url 'bio_article' 'emocionalnyy_bioritm' %}'>Эмоциональный биоритм</a>: {{ today_info|biorithm:28|safe}}
             </li>
             <li>
                 <span class='period33'>&mdash;&nbsp;</span>
-                Умственный биоритм: {{ today_info|biorithm:33|safe}}
+                <a title='описание интеллектуального биоритма' alt='Интеллектуальный биоритм' href='{% url 'bio_article' 'intellektualnyy_bioritm' %}'>Умственный биоритм</a>: {{ today_info|biorithm:33|safe}}
             </li>
         </ul>
     </div>

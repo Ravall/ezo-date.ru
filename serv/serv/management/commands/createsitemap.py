@@ -43,7 +43,10 @@ class Command(BaseCommand):
         sm = mySiteMap()
 
         # страницы, где появляются новые статьи
-        for url in ['all_nums', 'moonbirthday_nums', 'solar_12', 'moonphases_articles', 'suntime_articles']:
+        for url in [
+            'all_nums', 'moonbirthday_nums', 'solar_12',
+             'moonphases_articles', 'suntime_articles', 'bio_articles'
+        ]:
             sm.add(reverse(url), priority=1.0)
         # просто страницы
         for url in [
@@ -67,9 +70,12 @@ class Command(BaseCommand):
         # статьи фазы луны
         for article_name in api_get_by_tags('moon_phases'):
             sm.add(reverse('moonphases_article', args=[article_name]))
-        # статьи фазы луны
+        # статьи истинного полдня
         for article_name in api_get_by_tags('suntime'):
             sm.add(reverse('suntime_article', args=[article_name]))
+        # статьи биоритмы
+        for article_name in api_get_by_tags('biorythms'):
+            sm.add(reverse('bio_article', args=[article_name]))
             
 
         out = open('{0}/xml/sitemap.xml'.format(settings.MEDIA_ROOT), 'w')

@@ -164,3 +164,23 @@ class AjaxGetData(BioResult):
         return context
 
 
+class ArticlesView(ApiRequestMixin, BiorythmsMixin):
+    template_name = 'biorythms/articles.html'
+    url  = 'biorythms_articles'
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticlesView, self).get_context_data(**kwargs)
+        context['articles'] = self.api_get_by_tags('biorythms')
+        return context 
+
+
+class ArticleView(ApiRequestMixin, BiorythmsMixin):
+    template_name = 'biorythms/article.html'
+    url  = 'biorythms_articles'
+
+    def get_context_data(self, **kwargs):
+        context = super(ArticleView, self).get_context_data(**kwargs)
+        context['article'] = self.api_get_article(context['artname'])
+        return context 
+
+
