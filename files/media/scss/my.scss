@@ -9,6 +9,7 @@ $orange_color: #f37019;
 
 div.side_bar {
     color: #f1f2f2;
+
     div.logo {
         width: 100%;
         background-color: #2980b9;
@@ -27,6 +28,7 @@ div.side_bar {
                 color:#fff;
             }
         }
+
     }
     ul {
         margin-left: 20px;
@@ -83,6 +85,11 @@ div.footer {
         @include grid-column(3);
         height: 100%;
         padding: 0px;
+        min-width:300px;
+        div.ad {
+            padding-top:70px;
+            text-align:center;
+        }
 
     }
     div.content {
@@ -109,6 +116,9 @@ div.footer {
                 padding-right:20px;
             }
         }
+        div.ad {
+            display:none;
+        }
     }
     div.content {
         @include grid-column(12, true);
@@ -122,6 +132,9 @@ div.footer {
 /* телефоны */
 @media screen and (min-width: 320px) and (max-width: 700px) {
      div.side_bar {
+        div.ad {
+            display:none;
+        }
         div.logo {
             h2 {
                 padding: 20px 0px;
@@ -137,6 +150,7 @@ div.footer {
                 padding-right:20px;
             }
         }
+
     }
     div.content {
         @include grid-column(12, true);
@@ -149,6 +163,10 @@ div.footer {
 /* хня какая-то */
 @media screen and (max-width: 320px) {
     div.side_bar {
+        div.ad {
+
+            display:none;
+        }
         div.logo {
             h2 {
                 padding: 10px 0px;
