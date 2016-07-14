@@ -11,7 +11,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy
 
 
-calendar.month_name = calendar._localized_month("%OB,")
+#calendar.month_name = calendar._localized_month("%OB,")
 
 
 class MyHtmlCalendar(calendar.LocaleHTMLCalendar):

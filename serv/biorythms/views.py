@@ -17,7 +17,7 @@ from snct_date.date import (
 import calendar
 
 
-calendar.month_name = calendar._localized_month("%OB")
+#calendar.month_name = calendar._localized_month("%OB")
 
 
 class MyHtmlCalendar(calendar.LocaleHTMLCalendar):

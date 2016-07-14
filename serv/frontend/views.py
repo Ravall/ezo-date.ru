@@ -10,7 +10,7 @@ from moonbirthday.service import get_geo_by_cityid
 from user.service.moon import get_moonday_info
 from user.service.sun import get_sun_info
 
-calendar.month_name = calendar._localized_month("%OB,")
+#calendar.month_name = calendar._localized_month("%OB,")
 
 
 class MyHtmlCalendar(calendar.LocaleHTMLCalendar):
@@ -52,6 +52,7 @@ class Index(TemplateView, SessionMixin):
 
 
     def get_context_data(self, **kwargs):
+        calendar.month_name = calendar._localized_month("%OB,")
         myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU.UTF-8')
         clndr =  myCal.formatmonth()
 
