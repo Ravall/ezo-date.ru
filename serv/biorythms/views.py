@@ -170,7 +170,10 @@ class ArticlesView(ApiRequestMixin, BiorythmsMixin):
 
     def get_context_data(self, **kwargs):
         context = super(ArticlesView, self).get_context_data(**kwargs)
-        context['articles'] = self.api_get_by_tags('biorythms')
+        context['articles']         = self.api_get_by_tags('biorythms')
+        context['articles_emo']     = self.api_get_by_tags('emo_biorhythm')   
+        context['articles_mind']    = self.api_get_by_tags('mind_biorhythm')
+        context['articles_fiz']     = self.api_get_by_tags('fiz_biorhythm')   
         return context 
 
 

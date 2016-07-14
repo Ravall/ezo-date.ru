@@ -52,7 +52,6 @@ class Index(TemplateView, SessionMixin):
 
 
     def get_context_data(self, **kwargs):
-        calendar.month_name = calendar._localized_month("%OB,")
         myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU.UTF-8')
         clndr =  myCal.formatmonth()
 
