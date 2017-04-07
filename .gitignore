@@ -5,7 +5,7 @@ files/collected_static/
 files/media/css/*
 # C extensions
 *.so
-
+.idea/*
 # Packages
 *.egg
 *.egg-info

@@ -203,9 +203,9 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'sancta_serv',
-            'USER': 'sancta_serv_user',
-            'PASSWORD': 'sancta_serv_user_password',
+            'NAME': 'ezo-date',
+            'USER': 'root',
+            'PASSWORD': '',
             'HOST': '127.0.0.1',
             'PORT': '',
             'TEST': {

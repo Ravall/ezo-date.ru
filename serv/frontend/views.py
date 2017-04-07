@@ -57,7 +57,9 @@ class Index(TemplateView, SessionMixin):
 
 
         city, city_id = self.get_city()
+
         geo = get_geo_by_cityid(city_id)
+
 
 
         now = datetime.datetime.now()
