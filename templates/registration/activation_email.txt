@@ -10,7 +10,7 @@
 http://{{site.domain}}{% url 'registration_activate' activation_key %}
 
 
-С уважением, команда сайта Дни Силы.
+С уважением, администратор сайта Дни Силы.
 
 
 
