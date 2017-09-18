@@ -1,64 +1,41 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from user.service.moon import get_moon_bithday
-from django.views.generic import TemplateView, RedirectView
-from serv.views import ApiRequestMixin, SessionMixin, FullBirthDayFormMixin
-from django.views.generic.edit import ProcessFormView
+from django.views.generic.edit import ProcessFormView, FormMixin
 from django.http import Http404, HttpResponseRedirect
 from django.core.urlresolvers import reverse_lazy
+from serv.views import ServiceMixin, LoginRequiredMixin, ProfileMixin
+from user.forms.form import FullBirthdayForm
+from user.service.moon import get_moon_bithday
 
 
-
-class MoonBirthdayMixin(TemplateView):
-    url = ''
-
-
-    def get_moonbirthday(self):
-        if not self.get_value('city'):
-            return False
-        city, city_id = self.get_value('city').split('%%')
-        b_dt = '{0} {1}'.format(self.get_value('date'), self.get_value('time'))
-        b_dt = datetime.strptime(b_dt, '%d.%m.%Y %H:%M')
-        return get_moon_bithday(b_dt, city_id)
+class MoonBirthdayService(ServiceMixin):
+    service = 'moonbirthday'
 
 
-    def get_context_data(self, **kwargs):
-        kwargs.setdefault('service', 'moonbirthday')
-        kwargs.setdefault('url', self.url)
-        return super(MoonBirthdayMixin, self).get_context_data(**kwargs)
-
-
-class IndexView(ApiRequestMixin, MoonBirthdayMixin):
+class IndexView(MoonBirthdayService):
     url = 'moonbirthday_home'
     template_name = "moonbirthday/index.html"
 
-
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context.update({
+    def get_context(self, **kwargs):
+        return {
             'article': self.api_get_article('lunnyy_den_rozhdeniya')
-        })
-        return context
+        }
 
 
-class NumsView(ApiRequestMixin, MoonBirthdayMixin):
+class NumsView(MoonBirthdayService):
     url = 'moonbirthday_nums'
     template_name = "moonbirthday/nums.html"
 
-
-    def get_context_data(self, **kwargs):
-        context = super(NumsView, self).get_context_data(**kwargs)
-        context.update({
+    def get_context(self, **kwargs):
+        return {
             'articles': self.api_get_by_tags('moon_birthday')
-        })
-        return context
+        }
 
 
-
-class OneNumView(ApiRequestMixin, MoonBirthdayMixin, SessionMixin):
-    '''
+class OneNumView(MoonBirthdayService, ProfileMixin):
+    """
     Просмотр статьи о конкретном лунном дне 
-    '''
+    """
     template_name = "moonbirthday/oneday.html"
     url = 'moonbirthday_nums'
 
@@ -68,42 +45,35 @@ class OneNumView(ApiRequestMixin, MoonBirthdayMixin, SessionMixin):
             raise Http404
         return super(OneNumView, self).get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        if self.get_moonbirthday() == int(kwargs['nday']):
-            self.url = 'my'
-        context = super(OneNumView, self).get_context_data(**kwargs)
-        context['article'] = self.api_get_article('{0}_lunnyy_den_rozhdeniya'.format(context['nday']))
-        context['nums'] = range(1,31)
-        context['num'] = context['nday']
-        
-        return context
+    def get_context(self, **kwargs):
+        return {
+            'article': self.api_get_article('{0}_lunnyy_den_rozhdeniya'.format(kwargs['nday'])),
+            'nums': range(1, 31),
+            'num': kwargs['nday']
+        }
 
 
-class FormView(FullBirthDayFormMixin, ProcessFormView, MoonBirthdayMixin, SessionMixin):
+class FormView(ProcessFormView, FormMixin, MoonBirthdayService):
     url = 'form'
     template_name = "moonbirthday/form.html"
+    form_class = FullBirthdayForm
 
     def form_valid(self, form):
-        self.save_to_session(form)
-        return HttpResponseRedirect(reverse_lazy('moonbirthday_my_day'))
+        b_dt = '{0} {1}'.format(form.cleaned_data['date'], form.cleaned_data['time'])
+        born_date = datetime.strptime(b_dt, '%d.%m.%Y %H:%M')
+        return HttpResponseRedirect(reverse_lazy(
+            'moonbirthday_one_num',
+            kwargs={'nday':get_moon_bithday(born_date, self.request.POST['city_1'])}
+        ))
 
 
-class MyDayView(ApiRequestMixin, MoonBirthdayMixin, SessionMixin):
+class MyDayView(LoginRequiredMixin, MoonBirthdayService):
     url = 'my'
     template_name = "moonbirthday/oneday.html"
 
-    def get(self, request, *args, **kwargs):
-        if not (
-            self.get_value('date') and self.get_value('time') and self.get_value('city')
-        ):
-            return HttpResponseRedirect(reverse_lazy('moonbirthday_form'))
-        return super(MyDayView, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(MyDayView, self).get_context_data(**kwargs)
-
-        num = self.get_moonbirthday()
-        context['article'] = self.api_get_article('{0}_lunnyy_den_rozhdeniya'.format(num))
-        context['nums'] = range(1, 31)
-        context['num'] = num
-        return context
+    def get_context(self, **kwargs):
+        num = get_moon_bithday(self.profile.born_date, self.profile.city_id)
+        return {
+            'num': num,
+            'article': self.api_get_article('{0}_lunnyy_den_rozhdeniya'.format(num))
+        }

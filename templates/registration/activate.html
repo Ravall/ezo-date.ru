@@ -1,8 +1,12 @@
 {% extends "registration/layout.html" %}
-{% block meta_title %}Регистрация.{% endblock %}
 
-{% block content %}
-   <p><span class='error'>Произошла ошибка при активации аккаунта.</span> Вероятно вы уже его активировали и данная ссылка уже не актуальна. Попробуйте войти с вашим логином и паролем</p>
+{% block meta_page_title %}Активация аккаунта.{% endblock %}
+{% block title %}Активация аккаунта{% endblock %}
+
+{% block img %} <h1>:(</h1> {% endblock %}
+
+{% block text_content %}
+   <p class='error'>Произошла ошибка при активации аккаунта. Вероятно вы уже его активировали и данная ссылка уже не актуальна. Попробуйте войти с вашим логином и паролем</p>
 {% endblock %}
 
 

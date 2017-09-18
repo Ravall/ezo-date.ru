@@ -1,14 +1,13 @@
-from django.conf.urls import patterns, include, url
+from django.conf.urls import patterns, url
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from user.views import AjaxCity
+from user.views import ProfileView
+from django.contrib.auth.decorators import login_required
 
 
 urlpatterns = patterns('',
-#    url(r'^registration$', RegView.as_view(), name='user_registration'),
-#    url(r'^avatar/', include('avatar.urls')),
-    url(r'^ajax/city$', AjaxCity.as_view(), name='ajax_city_autocomplete'),
+    url(r'^profile/$', login_required(ProfileView.as_view()), name='user_profile'),
 )
 
 if settings.DEBUG:

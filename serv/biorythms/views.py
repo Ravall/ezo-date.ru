@@ -1,189 +1,110 @@
 # -*- coding: utf-8 -*-
 import json
-from datetime import  date
-from serv.service import api_request
-from django.views.generic.edit import ProcessFormView
-from django.views.generic import TemplateView
-from serv.views import (
-    ApiRequestMixin, BirthDayFormMixin, SessionMixin,
-    HttpResponse303, AjaxTemplateMixin
-)
+import calendar
+from django.views.generic.edit import ProcessFormView, FormMixin
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from user.service import biorythms as bio_service
-from snct_date.date import (
-    today, day_maps, yyyy_mm_dd, date_shift, num_days_in_month
-)
-import calendar
+from snct_date.date import today, day_maps, yyyy_mm_dd, date_shift, num_days_in_month
+from serv.views import ServiceMixin, LoginRequiredMixin
+from user.forms.form import BirthdayForm
+from bio_calendar import MyHtmlCalendar
 
 
-#calendar.month_name = calendar._localized_month("%OB")
+class BiorythmsService(ServiceMixin):
+    service = 'biorythms'
 
 
-class MyHtmlCalendar(calendar.LocaleHTMLCalendar):
-    today = date.today()
-
-
-    def formatday(self, day, weekday):
-        css = [self.cssclasses[weekday]]
-        if (
-            day == self.today.day and
-            self.today.month == self.month and
-            self.today.year == self.year
-        ):
-            css.append('today')
-
-        if self.current_date == [day, self.month, self.year]:
-            css.append('selected')
-
-        if day == 0:
-            return '<td class="noday">&nbsp;</td>'
-        else:
-            return (
-                '<td class="%s">'
-                '<a class="get_bio_data" day="%s" href="#">%d</a>'
-                '</td>'
-            ) % (
-                ' '.join(css),
-                yyyy_mm_dd((day, self.month, self.year)),
-                day
-            )
-
-
-    def formatmonthname(self, theyear, themonth, withyear=True):
-        with calendar.TimeEncoding(self.locale) as encoding:
-            s = calendar.month_name[themonth]
-            if encoding is not None:
-                s = s.decode(encoding)
-            if withyear and theyear != self.today.year:
-                s = '%s, %s' % (s, theyear)
-            prev_month_day = yyyy_mm_dd(
-                date_shift(1, themonth, theyear, -1)
-            )
-            next_month_day = yyyy_mm_dd(
-                date_shift(
-                    num_days_in_month(themonth,theyear),
-                    themonth, theyear, 1
-                )
-            )
-            return (
-                '<tr><th colspan="7" class="month">'
-                '<a href="#" day="%s" class="get_bio_data">&larr;</a> '
-                '%s'
-                ' <a href="#" day="%s" class="get_bio_data">&rarr;</a>'
-                '</th></tr>'
-            )% (prev_month_day, s, next_month_day)
-
-
-    def formatmonth(self, theyear=today.year, themonth=today.month, withyear=True):
-        self.year = theyear
-        self.month = themonth
-        return super(MyHtmlCalendar, self).formatmonth(theyear, themonth, withyear)
-
-
-class BiorythmsMixin(TemplateView):
-    url = ''
-
-
-    def get_context_data(self, **kwargs):
-        kwargs.setdefault('service', 'biorythms')
-        kwargs.setdefault('url', self.url)
-        return super(BiorythmsMixin, self).get_context_data(**kwargs)
-
-
-class IndexView(ApiRequestMixin, BiorythmsMixin):
+class IndexView(BiorythmsService):
     template_name = 'biorythms/index.html'
     url = 'bio_home'
 
-
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context.update({
+    def get_context(self, **kwargs):
+        return {
             'content': self.api_get_article('biorythms_about')
-        })
-        return context
+        }
 
 
-class BioFormView(BirthDayFormMixin, ProcessFormView, BiorythmsMixin, SessionMixin):
-    template_name = 'biorythms/form.html'
-    url = 'form'
+class ArticlesView(BiorythmsService):
+    template_name = 'biorythms/articles.html'
+    url = 'biorythms_articles'
+
+    def get_context(self, **kwargs):
+        return {
+            'articles': self.api_get_by_tags('biorythms'),
+            'articles_emo': self.api_get_by_tags('emo_biorhythm'),
+            'articles_mind': self.api_get_by_tags('mind_biorhythm'),
+            'articles_fiz': self.api_get_by_tags('fiz_biorhythm')
+        }
 
 
-    def form_valid(self, form):
-        self.save_value('date', 'date', form)
-        return HttpResponseRedirect(
-            reverse_lazy(
-                'bio_result'
-            )
-        )
+class ArticleView(BiorythmsService):
+    template_name = 'biorythms/article.html'
+    url  = 'biorythms_articles'
+
+    def get_context(self, **kwargs):
+        return {
+            'article': self.api_get_article(kwargs['artname'])
+        }
 
 
-class BioResult(BiorythmsMixin, SessionMixin):
-    template_name = 'biorythms/biorythm.html'
-    url = 'bio_result'
+class BioContext(BiorythmsService):
     current_date = today()
     today = yyyy_mm_dd(today())
 
 
-    def get(self, request, *args, **kwargs):
-        return super(BioResult, self).get(request, *args, **kwargs) \
-            if self.get_value('date') \
-            else HttpResponse303(reverse_lazy(
-                'bio_form'
-            ))
 
+    def get_context(self, **kwargs):
+        date = self.get_date()
+        if not date:
+            return {}
+        date_tuple = date.split('.')
+        bio_context = bio_service.get_bio_context(date_tuple, self.current_date)
 
-    def get_context_data(self, **kwargs):
-        context = super(BioResult, self).get_context_data(**kwargs)
-        date_bd = self.get_value('date').split('.')
-        bio_context = bio_service.get_bio_context(
-            self.get_value('date').split('.'),
-            self.current_date
-        )
         bio_context['data'] = json.dumps(bio_context['data'])
-        context.update(bio_context)
-        context.update({'date_map':
+        bio_context.update({'date_map':
             {k: yyyy_mm_dd(v) for k,v in day_maps(self.current_date).items()}
         })
+
         myCal = MyHtmlCalendar(calendar.MONDAY, 'ru_RU.UTF-8')
         myCal.current_date = self.current_date
-        context.update({
-            'today':self.today,
-            'calendar':myCal.formatmonth(self.current_date[2], self.current_date[1])
+        bio_context.update({
+            'today': self.today,
+            'calendar': myCal.formatmonth(self.current_date[2], self.current_date[1])
         })
-        return context
+        return bio_context
 
 
-class AjaxGetData(BioResult):
+class BioMy(LoginRequiredMixin, BioContext):
+    template_name = 'biorythms/biorythm.html'
+    url = 'bio_my'
+
+
+class AjaxGetData(LoginRequiredMixin, BioContext):
     template_name = 'biorythms/bio_info.html'
 
-
-    def get_context_data(self, **kwargs):
+    def get(self, request, *args, **kwargs):
         self.current_date = map(int, self.request.GET['day'].split('-')[::-1])
-        context = super(AjaxGetData, self).get_context_data(**kwargs)
-        return context
+        return super(AjaxGetData, self).get(request, *args, **kwargs)
 
 
-class ArticlesView(ApiRequestMixin, BiorythmsMixin):
-    template_name = 'biorythms/articles.html'
-    url  = 'biorythms_articles'
+class BioFormView(BioContext, ProcessFormView, FormMixin, BiorythmsService):
+    template_name = 'biorythms/form.html'
+    url = 'form'
+    form_class = BirthdayForm
 
-    def get_context_data(self, **kwargs):
-        context = super(ArticlesView, self).get_context_data(**kwargs)
-        context['articles']         = self.api_get_by_tags('biorythms')
-        context['articles_emo']     = self.api_get_by_tags('emo_biorhythm')   
-        context['articles_mind']    = self.api_get_by_tags('mind_biorhythm')
-        context['articles_fiz']     = self.api_get_by_tags('fiz_biorhythm')   
-        return context 
+    def get_date(self):
+        return self.request.session.pop('bio_date', '')
 
+    def get_initial(self):
+        return {
+            'date': self.request.session.get('bio_date', '')
+        }
 
-class ArticleView(ApiRequestMixin, BiorythmsMixin):
-    template_name = 'biorythms/article.html'
-    url  = 'biorythms_articles'
-
-    def get_context_data(self, **kwargs):
-        context = super(ArticleView, self).get_context_data(**kwargs)
-        context['article'] = self.api_get_article(context['artname'])
-        return context 
-
-
+    def form_valid(self, form):
+        self.request.session['bio_date'] = form.cleaned_data['date']
+        return HttpResponseRedirect(
+            reverse_lazy(
+                'bio_form'
+            )
+        )

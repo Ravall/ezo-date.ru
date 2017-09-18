@@ -3,12 +3,17 @@
 Тут хранятся миксины ко вьюшкам
 '''
 import json
+import datetime
 from serv.service import api_request
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView
 from django.views.generic.edit import FormMixin
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
-from user.forms.form import BirthdayForm, FullBirthdayForm, CityLiveForm
+from django.conf import settings
 from django.http import HttpResponse
+from user.models import EzoUser
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 
 class HttpResponse303(HttpResponseRedirect):
@@ -58,59 +63,79 @@ class ApiRequestMixin(TemplateView):
         return content
 
 
-class SessionMixin(FormMixin):
+class ProfileMixin(FormMixin):
     '''
-    общий миксин, с методами сохранения в сессии данных формы
+    общий миксин, с методами сохранения
     '''
-    key = 'born'
+    profile = False
 
-
-    def get_value(self, key, default=None):
-        return self.request.session.get(
-            '{1}_{0}'.format(self.key, key),
-            default
+    def get_initial(self):
+        self.profile, is_created = EzoUser.objects.select_related().get_or_create(
+            user_id=self.request.user.id
+        )
+        return dict(
+            [(key, self.get_value(key)) for key in self.form_class.declared_fields.keys()]
         )
 
-    
-    def save_to_session(self, form):
-        for key in form.cleaned_data.keys():
-            self.save_value(key, key, form)
-
-    
-    def save_value(self, key_form, key_session, form):
-
-        self.request.session[
-            '{0}_{1}'.format(key_session, self.key)
-        ] = form.cleaned_data[key_form]
+    def get_value(self, key):
+        fn = getattr(self.profile, "get_{}".format(key), None)
+        if callable(fn):
+            return fn()
+        return getattr(self.profile, key)
 
 
+class ServiceMixin(ApiRequestMixin):
+    url = ''
+    profile = False
+    service = ''
 
-class BirthDayFormMixin(SessionMixin):
-    form_class = BirthdayForm
+    def get_context(self, **kwargs):
+        return {}
+
+    def get_context_data(self, **kwargs):
+        kwargs.setdefault('service', self.service)
+        kwargs.setdefault('url', self.url)
+        context = super(ServiceMixin, self).get_context_data(**kwargs)
+        context.update(self.get_context(**kwargs))
+        return context
 
 
-    def get_initial(self):
-        return {'date': self.get_value('date')}
+class LoginRequiredMixin(object):
+    def get(self, request, *args, **kwargs):
+        try:
+            self.profile = EzoUser.objects.select_related().get(pk=self.request.user.id)
+        except EzoUser.DoesNotExist:
+            messages.add_message(self.request, messages.WARNING, 'Требуется заполнить профиль')
+            return HttpResponseRedirect(reverse_lazy('user_profile'))
+        return super(LoginRequiredMixin, self).get(request, *args, **kwargs)
+
+    def get_date(self):
+        return self.profile.get_date()
+
+    def get_bd(self):
+        return self.profile.born_date
+
+    @classmethod
+    def as_view(cls, **initkwargs):
+        view = super(LoginRequiredMixin, cls).as_view(**initkwargs)
+        return login_required(view)
 
 
+class CityLiveMixin(object):
+    now = datetime.datetime.now()
+    geo = None
 
-class FullBirthDayFormMixin(BirthDayFormMixin):
-    form_class = FullBirthdayForm
+    def get_city(self):
+        try:
+            profile = EzoUser.objects.select_related().get(pk=self.request.user.id)
+            city_name, city_id = profile.get_city_live()
+            if not city_id:
+                raise Exception()
+        except Exception:
+            city_id = settings.MOONBIRTHDAY['default_city_id']
+            city_name = settings.MOONBIRTHDAY['default_city']
+        return [city_name, city_id]
 
-    def get_initial(self):
-        return {
-            'date': self.get_value('date'),
-            'time': self.get_value('time'),
-            'city': self.get_value('city'),
-        }
-   
 
-class CityFormMixin(SessionMixin):
-    form_class = CityLiveForm
-
-    def get_initial(self):
-        return {
-            'city_live': self.get_value('city_live', self.get_value('city'))
-        }
 
 

@@ -36,12 +36,12 @@
                     alt='рассчитать число рождения'
                     title="расчитать число рождения онлайн">Расчитать</a>
             </li>
-            <li {% if url == 'my_num' %} class="active" {% endif %}>
-                <a  href='{% url 'num_result' %}'
+            <li {% if url == 'num_my' %} class="active" {% endif %}>
+                <a  href='{% url 'num_my' %}'
                     alt='нумерология рождения'
                     title="нумерология по дате моего рождения">Мое&nbsp;число</a>
             </li>
-            <li {% if url == 'all' %} class="active" {% endif %}>
+            <li {% if url == 'num_all' %} class="active" {% endif %}>
                 <a  href='{% url 'all_nums' %}'
                     alt='все числа рождения'
                     title="числа рождения">Все&nbsp;числа&nbsp;рождения</a>

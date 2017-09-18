@@ -1,19 +1,17 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from frontend.views import Index
-from django.views.generic import TemplateView
-from django.views.defaults import page_not_found, server_error
 from user.views import AjaxCity
-from frontend.v2 import V2
+
 
 
 admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', Index.as_view(), name='home'),
-    url(r'^v2$', V2.as_view(), name='v2'),
 
 
     url(r'^numerology/', include('numerology.urls')),
@@ -30,12 +28,18 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     url(r'^geoip/', include('django_geoip.urls')),
 
-#    url(r'^404/$', page_not_found),
-#    url(r'^500/$', server_error)
 
-    url(r'^ajax/city$', AjaxCity.as_view(), name='ajax_city_autocomplete'),
+    url(r'^ajax/city/$', AjaxCity.as_view(), name='ajax_city_autocomplete'),
+
+
+    url(r'^user/', include('user.reg_urls')),
+
 )
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += staticfiles_urlpatterns()
+    import debug_toolbar
+    urlpatterns = [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns

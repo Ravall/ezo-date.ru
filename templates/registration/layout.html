@@ -1,11 +1,9 @@
-{% extends 'layout.html' %}
+{% extends 'layout_my.html' %}
 {% load static %}
-{% block css %}
-    <link type="text/css" href="{% static "css/jquery.autocomplete.css" %}" rel="stylesheet" charset="utf-8"/>
-    <link type="text/css" rel="stylesheet" href="{% static "css/forms.css" %}" charset="utf-8">
-    <link type="text/css" rel="stylesheet" href="{% static "css/registration.css" %}" charset="utf-8">
-    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
-{% endblock %}
+
+
+{% block meta_description %}{% endblock %}
+{% block meta_keywords %}{% endblock %}
 
 
 {% block og_meta %}
@@ -13,13 +11,54 @@
     <meta name="robots" content="noindex">
 {% endblock %}
 
-{% block base_content %}
 
-{% include "registration/_auth_header.html" %}
+{% block meta_head %}
+    {{ block.super }}
+    <link type="text/css" rel="stylesheet" href="{% static "css/registration.css" %}" charset="utf-8">
+    <script type="text/javascript" src="{% static "js/jquery.autocomplete.min.js" %}"></script>
+    <script type="text/javascript" src="{% static "js/profile.js" %}"></script>
+{% endblock %}
 
-<div id='text_content'>
-  <h2>{% block content_title %}Регистрация{% endblock %}</h2>
-  {% block content %}{% endblock %}
-</div>
+
+
+{% block content %}
+
+    <div class="promo">
+        <h1>{% block title %}Регистрация{% endblock %}</h1>
+        {% block img %}
+            <img    src="{% static 'img/user_logo.png' %}"
+                    alt='Нумерология по дате рождения'
+                    title='Нумерология по дате рождения'
+                    width="150px"/>
+        {% endblock %}
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="navigator">
+        <ul>
+            <li {% if url == 'user_profile' %} class="active" {% endif %}>
+                <a  href='{% url 'user_profile' %}'
+                    alt="Профиль"
+                    title="Профиль">Профиль</a>
+            </li>
+            <li {% if url == 'auth_settings' %} class="active" {% endif %}>
+                <a  href='{% url 'auth_settings' %}'
+                    alt="настройки доступа"
+                    title="настройки доступа">Доступы</a>
+            </li>
+            <li>
+                <a  href='{% url 'auth_logout' %}'
+                    title="выйти">Выйти</a>
+            </li>
+
+
+        </ul>
+    </div>
+    {% endif %}
+
+    {% block sub_navigator %}{% endblock %}
+    <div id='text_content'>
+        {% block text_content %}{% endblock %}
+    </div>
 {% endblock %}
 

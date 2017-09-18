@@ -1,13 +1,12 @@
 {% extends "registration/layout.html" %}
 
-{% block meta_title %}Регистрация.{% endblock %}
-{% block og_meta %}{% endblock %}
-{% block content %}
-<div id='form'>
-    {% if form.errors %}
-        <div class='error'>форма заполнена неверно</div>
-    {% endif %}
-    <div>Для вычисления биоритмов, дней открытия соляра, лунных фаз и других полезных данных нам требуется дата, время и место рождения</div>
-    {% include 'registration/reg_form.html' with button='регистрация' %}
-</div>
+{% block meta_page_title %}Регистрация.{% endblock %}
+{% block title %}Регистрация.{% endblock %}
+
+
+
+{% block text_content %}
+    <p>Для вычисления биоритмов, дней открытия соляра,
+        лунных фаз и других полезных данных нам требуется дата, время и место рождения</p>
+    {% include "user/form/simple_form.html" with button="Зарегистрироваться" %}
 {% endblock %}

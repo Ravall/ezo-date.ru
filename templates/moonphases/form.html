@@ -1,0 +1,9 @@
+{% extends 'moonphases/layout.html' %}
+{% load static %}
+
+
+{% block text_content %}
+    {{ city_id }}
+    {% include "user/form/simple_form.html" with button="Рассчитать" %}
+
+{% endblock %}

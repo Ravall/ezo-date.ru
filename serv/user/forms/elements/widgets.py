@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 from django import forms
 from django.utils.safestring import mark_safe
 from django.template.loader import render_to_string
-from user.service.city import get_default_city
 
 
 class ElementBorn(forms.widgets.TextInput):

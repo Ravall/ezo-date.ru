@@ -24,13 +24,14 @@
 
 {% block content %}
     <div class="promo">
-        <h1>{% block title %} Солнечное время для города <a alt='солнечный режим дня для города {{city}}' title='режим дня для выбранного города' href='{% url 'suntime_city' %}'>{{city}}</a> {% endblock %}</h1>
+
         {% block img %}
         <div id='clock'>
             <canvas height="280" width="280" id="realtime" >
                 Расчет астрономического полдня
             </canvas>
         </div>
+            <h1>{% block title %} Солнечное время для города {{city}} {% endblock %}</h1>
         {% endblock %}
     </div>
     <div class="navigator">
@@ -40,6 +41,11 @@
             </li>
             <li {% if url == 'suntime_articles' %} class="active" {% endif %}>
                 <a alt='как жить по солнечным ритмам' title='жить по солнцу. режим дня' href='{% url 'suntime_articles' %}'>О&nbsp;суточных&nbsp;ритмах</a>
+            </li>
+            <li {% if url == 'suntime_form' %} class="active" {% endif %}>
+                <a  href='{% url 'suntime_form' %}'
+                    alt='Рассчитать солнечное время в выбранном городе'
+                    title="Солнечное время в городе">Солнечное время для своего города</a>
             </li>
         </ul>
     </div>

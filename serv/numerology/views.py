@@ -1,92 +1,87 @@
 # -*- coding: utf-8 -*-
-from serv.views import ApiRequestMixin, BirthDayFormMixin, SessionMixin, HttpResponse303
-from django.views.generic import TemplateView, RedirectView
-from django.views.generic.edit import ProcessFormView
+from django.views.generic.edit import ProcessFormView, FormMixin
 from django.core.urlresolvers import reverse_lazy
-from django.http import HttpResponseRedirect
-
+from django.http import HttpResponseRedirect, Http404
+from serv.views import ServiceMixin, LoginRequiredMixin
+from user.forms.form import BirthdayForm
 from user.service.numerology import get_birthday_num
-from django.http import Http404
 
 
-
-class NumerologyMixin(TemplateView):
-    url = ''
-    def get_context_data(self, **kwargs):
-        kwargs.setdefault('service', 'numerology')
-        kwargs.setdefault('url', self.url)
-        return super(NumerologyMixin, self).get_context_data(**kwargs)
+class NumerologyService(ServiceMixin):
+    service = 'numerology'
 
 
-class IndexView(ApiRequestMixin, NumerologyMixin):
+class IndexView(NumerologyService):
     template_name = 'numerology/index.html'
-    url  = 'num_home'
+    url = 'num_home'
 
-
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context.update({
+    def get_context(self, **kwargs):
+        return {
             'article': self.api_get_article('chislo_rozhdeniya_raschet')
-        })
-        return context
+        }
 
 
-class NumerologyFormView(BirthDayFormMixin, ProcessFormView, NumerologyMixin, SessionMixin):
+class NumerologyFormView(ProcessFormView, FormMixin, NumerologyService):
     template_name = 'numerology/form.html'
+    form_class = BirthdayForm
     url = 'form'
 
     def form_valid(self, form):
-        result = get_birthday_num(form.cleaned_data['date'])
-        self.save_value('date', 'date', form)
         return HttpResponseRedirect(
             reverse_lazy(
-                'num_birthday',kwargs = {'digit':result}
+                'num_birthday',
+                kwargs={'digit': get_birthday_num(form.cleaned_data['date'])}
             )
         )
 
 
-class AllNumsView(NumerologyMixin):
+class AllNumsView(NumerologyService):
     template_name = 'numerology/all.html'
-    url = 'all'
+    url = 'num_all'
 
-    def get_context_data(self, **kwargs):
-        context = super(AllNumsView, self).get_context_data(**kwargs)
-        context.update({
-            'all_nums': (1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22),
-        })
-        return context
+    def get_context(self, **kwargs):
+        return {
+            'all_nums': range(1, 10) + [11, 22],
+        }
 
 
-class NumView(ApiRequestMixin, NumerologyMixin, SessionMixin):
+class NumView(NumerologyService):
     template_name = 'numerology/num.html'
+    url = 'num_all'
 
     def get(self, request, *args, **kwargs):
         digit = int(kwargs['digit'])
-        if not( (digit > 0 and digit < 10) or digit in (11, 22) ):
+        if digit not in (range(1, 10)+[11, 22]):
             raise Http404
-        date = self.get_value('date')
-        if date and digit == get_birthday_num(date):
-            self.url = 'my_num'
         return super(NumView, self).get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(NumView, self).get_context_data(**kwargs)
-        context.update({
-            'all_nums': (1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 22),
+    def get_context(self, **kwargs):
+        return {
+            'all_nums':  range(1, 10) + [11, 22],
             'num': kwargs['digit'],
             'article': self.api_get_article(
                 'chislo_rozhdeniya_{0}'.format(kwargs['digit'])
             )
-        })
-        return context
+        }
 
 
-class NumerologyResult(RedirectView, SessionMixin):
+class NumerologyMy(LoginRequiredMixin, NumerologyService):
+    template_name = 'numerology/num.html'
+    url = 'num_my'
 
-    def get(self, request, *args, **kwargs):
-        date = self.get_value('date')
-        self.url = reverse_lazy(
-            'num_birthday', kwargs = {'digit':get_birthday_num(date)}
-        ) if date else reverse_lazy('num_form')
-        return HttpResponse303(self.url)
+    def get_context(self, **kwargs):
+        date = self.profile.get_date()
+        digit = get_birthday_num(date)
+
+        return {
+            'num': digit,
+            'article': self.api_get_article(
+                'chislo_rozhdeniya_{0}'.format(digit)
+            )
+        }
+
+
+
+
+
 

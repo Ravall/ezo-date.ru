@@ -6,21 +6,20 @@
 {% block meta_page_title %}Расшифровка 12 дней.{% endblock %}
 
 
+
 {% block text_content %} 
 
-
-
+{% block year_navigator %}
     <h2>Дата открытия соляра на:</h2>
     {% year_navigator 'solar_open_year' year %}
     <h1>
          {{solar_open_time }}
     </h1>
-
 <p>
     Двенадцать следующих деней с {{solar_open_time}} закладывают программу на следующий год, поэтому проижить их нужно с полной осознанностью, следуя рекомендациям и борясь с искушениями.
 </p>
 
-
+{% endblock %}
 
 <table>
 {% for day in days %}

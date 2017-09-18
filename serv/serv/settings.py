@@ -54,7 +54,7 @@ LANGUAGES = (
 )
 USE_I18N = True
 USE_L10N = True
-USE_TZ = True
+USE_TZ = False
 SITE_ID = 1
 
 
@@ -101,6 +101,7 @@ MIDDLEWARE_CLASSES = (
     'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
@@ -123,7 +124,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'django.contrib.redirects',
-#    'registration',
+    'registration',
     # scss
     'djcompass',
     #robot
@@ -149,8 +150,8 @@ INSTALLED_APPS = (
     'django_mobile',
     
     'frontend',
-    'services'
-
+    'services',
+    'debug_toolbar',
 
 )
 
@@ -158,15 +159,17 @@ INSTALLED_APPS = (
 #    'avatar',
 #)
 
-#ACCOUNT_ACTIVATION_DAYS = 2
 #REGISTRATION_AUTO_LOGIN = False
 #REGISTRATION_FORM = 'user.forms.form.RegForm'
 #INCLUDE_REGISTER_URL = False
 #SEND_ACTIVATION_EMAIL = True
 #REGISTRATION_OPEN = True
 #DEFAULT_FROM_EMAIL = 'admin@ezo-date.ru'
-#LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/user/profile/'
+LOGIN_URL = '/user/login/'
 
+ACCOUNT_ACTIVATION_DAYS = 2
+REGISTRATION_OPEN = True
 
 LOGGING = {
     'version': 1,
@@ -203,9 +206,9 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'ezo-date',
-            'USER': 'root',
-            'PASSWORD': '',
+            'NAME': 'sancta_serv',
+            'USER': 'sancta_serv_user',
+            'PASSWORD': 'gBEluZ0LDRun',
             'HOST': '127.0.0.1',
             'PORT': '',
             'TEST': {
@@ -260,9 +263,12 @@ MOONBIRTHDAY = {
 
 IPGEOBASE_ALLOWED_COUNTRIES = ['RU', 'UA']
 
+INTERNAL_IPS = ['127.0.0.1']
 
 
+LOCALE_PATHS = (
+    os.path.join(PATH, '../', 'locale'),
+)
 
-
-
+APPEND_SLASH = True
 

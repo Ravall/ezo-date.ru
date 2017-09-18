@@ -42,7 +42,7 @@
         <ul>
             <li {% if url == 'bio_home' %} class="active" {% endif %}>
                 <a  href='{% url 'bio_home' %}'
-                    alt="Биоритмы онлайн"
+                    alt="Биоритмы. Что это"
                     title="Биоритмы человека">Биоритмы&nbsp;человека</a>
             </li>
             <li {% if url == 'form' %} class="active" {% endif %}>
@@ -50,8 +50,8 @@
                     alt='расчет биоритмов'
                     title="расчет биоритмов по дате рождения">Расчитать</a>
             </li>
-            <li {% if url == 'bio_result' %} class="active" {% endif %}>
-                <a  href='{% url 'bio_result' %}'
+            <li {% if url == 'bio_my' %} class="active" {% endif %}>
+                <a  href='{% url 'bio_my' %}'
                     alt='биоритмы онлайн'
                     title="биоритмы по дате рождения">Мои&nbsp;биоритмы</a>
             </li>

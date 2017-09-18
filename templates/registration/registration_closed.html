@@ -1,8 +1,12 @@
 {% extends "registration/layout.html" %}
 
+{% block meta_page_title %}Регистрация.{% endblock %}
+{% block title %}Регистрация.{% endblock %}
 
-{% block content %}
-   <p><span class='error'>Регистрация закрыта в данный момент.</span> Просим прощения за технические сложности, попробуйте зарегистрироваться позже.</p>
+{% block img %} <h1>:(</h1> {% endblock %}
+
+{% block text_content %}
+   <p class="error">Регистрация закрыта в данный момент. Просим прощения за технические сложности, попробуйте зарегистрироваться позже.</p>
 {% endblock %}
 
 

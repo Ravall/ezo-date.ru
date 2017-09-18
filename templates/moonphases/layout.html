@@ -30,7 +30,7 @@
                 alt='{% alt_phase_period moon_info.today %}'
                 title="{% alt_phase_period moon_info.today %}">
                 <h2>{% alt_phase_period moon_info.today %}</h2>
-                {% phase_time moon_info 'periods' 'this_day' %} (<a alt='фазы луны в {{city}}' title='календарь луны в выбранном городе' href='{% url 'moonphases_city' %}'>{{city}}</a>)
+                {% phase_time moon_info 'periods' 'this_day' %} ({{city}})
         {% endblock %}
 
     </div>
@@ -50,6 +50,11 @@
                 <a  href='{% url 'moonphases_articles' %}'
                     alt='Как провести полнолуние'
                     title="практики на полнолуние и новолуние">Жить&nbsp;в&nbsp;ритме&nbsp;луны</a>
+            </li>
+        <li {% if url == 'moonphases_form' %} class="active" {% endif %}>
+                <a  href='{% url 'moonphases_form' %}'
+                    alt='Рассчитать фазы луны в выбранном городе'
+                    title="Фазы луны в городе">Фазы луны для своего города</a>
             </li>
         </ul>
     </div>

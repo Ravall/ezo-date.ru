@@ -1,4 +1,5 @@
 @import "../foundation/scss/foundation.scss";
+@import "variable.scss";
 
 $orange_color: #f37019;
 
@@ -8,9 +9,11 @@ $orange_color: #f37019;
 }
 
 div.side_bar {
+
     color: #f1f2f2;
 
     div.logo {
+
         width: 100%;
         background-color: #2980b9;
         h2 {
@@ -21,6 +24,11 @@ div.side_bar {
             text-align: center;
             color: #f1f2f2;
             font-size: 2em;
+            line-height:20px;
+
+           small {
+             font-size: 14px;
+           }
         }
         a {
             text-decoration: none;
@@ -79,8 +87,18 @@ div.footer {
 @media screen and (min-width: 1024px) {
     div.side_bar {
         position: fixed;
+        overflow-y: scroll;
         div.logo {
-            height: 100px;
+            height: 260px;
+            background-image: url('/static/img/solar_eclipse_orig.jpg');
+            background-repeat: no-repeat;
+            background-position: 70% center;
+            h2 {
+              padding-top: 100px;
+            }
+            button {
+                display: none;
+            }
         }
         @include grid-column(3);
         height: 100%;
@@ -88,7 +106,9 @@ div.footer {
         min-width:300px;
         div.ad {
             padding-top:70px;
-            text-align:center;
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
     }
@@ -103,10 +123,17 @@ div.footer {
 
 /* планшеты */
 @media screen and (min-width: 700px) and (max-width: 1024px) {
+
     div.side_bar {
         div.logo {
+
             h2 {
+
                 padding: 20px 0px;
+                small {
+                  color:#FFF;
+                  font-size: 10px;
+                }
             }
         }
         padding-bottom:10px;
@@ -131,13 +158,46 @@ div.footer {
 
 /* телефоны */
 @media screen and (min-width: 320px) and (max-width: 700px) {
+
+
+
+        div.logo {
+            @include grid-row();
+            position: fixed;
+            button {
+                padding-top: 35px;
+                @include grid-column(3);
+            }
+            div.title {
+                @include grid-column(8,true, false, 1);
+                h2 {
+                    text-align: left;
+                    margin-bottom:0px;
+                }
+            }
+        }
+
      div.side_bar {
+         position: fixed;
+         width: 100%;
+         div.side_menu {
+             padding-top: 100px;
+             display: none;
+
+         }
         div.ad {
             display:none;
         }
         div.logo {
             h2 {
                 padding: 20px 0px;
+              small {
+                  color:#FFF;
+                  font-size: 10px;
+                }
+            }
+            button {
+                display: block;
             }
         }
         h2.menu_title {
@@ -146,13 +206,17 @@ div.footer {
         padding-bottom:10px;
         ul {
             li {
-                display: inline; 
+                display: block;
                 padding-right:20px;
             }
         }
 
+
+
+
     }
     div.content {
+        padding-top: 100px;
         @include grid-column(12, true);
         div#text_content {
             padding: 0px 20px;
@@ -162,6 +226,13 @@ div.footer {
 
 /* хня какая-то */
 @media screen and (max-width: 320px) {
+    div.logo {
+        button {
+            display: block;
+            padding-top: 15px;
+        }
+    }
+
     div.side_bar {
         div.ad {
 
@@ -170,6 +241,9 @@ div.footer {
         div.logo {
             h2 {
                 padding: 10px 0px;
+                small {
+                  display: none;
+                }
             }
         }
         h2.menu_title {
@@ -268,7 +342,7 @@ body{
             }
             h1 {
                 font-size: 2em;
-                padding: 10px 0px;
+                padding: 30px 0px;
             }
 
             background-color: #fff;
@@ -316,6 +390,7 @@ body{
         div.promo {
             @include grid-row();
             @include grid-column(12, true);
+            max-width: none !important;
             text-align: center;
             background-color: #fff;
             padding-bottom: 20px;
@@ -357,6 +432,24 @@ body{
                 font-size: 1em;
             }
         }
+        div#form {
+          text-align: center;
+          ul.errorlist {
+                list-style-type:none;
+                color: $orange_color;
+                font-size: 1em;
+          }
+            ul.messages {
+                li.success {
+                    color: $color_green;
+                    font-weight: bold;
+                }
+                li.warning {
+                    color: $color_orange;
+                    font-weight: bold;
+                }
+            }
+        }
         div.list {
             text-align: center;
             ul {
@@ -369,8 +462,21 @@ body{
         div.left_list {
             text-align: left;
         }
-        div.ad {
-            text-align: center;
+        div#b_script_146841 {
+          margin-left: auto;
+          margin-right: auto;
+          div.ad {
+            width: 728px;
+
+          }
+        }
+        div#b_script_149558 {
+          margin-left: auto;
+          margin-right: auto;
+          div.ad {
+            width: 240px;
+
+          }
         }
 
     }

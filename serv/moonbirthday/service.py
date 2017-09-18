@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import pytz
-from datetime import datetime
-import ephem
-from django.conf import settings
-from django.core.cache import cache
 from django.db import connection
 from moonbirthday.models import SxgeoCities, SxgeoRegions
-from django_geoip.models import IpRange
 
 
 def get_city(city):
@@ -31,17 +26,6 @@ def get_city_by_id(city_id):
         city_name = False
     return city_name, city_id
 
-
-def get_default_city(ip):
-    try:
-        geoip_record = IpRange.objects.by_ip(ip)
-        city = geoip_record.city
-        city_data = get_city(city)
-        city_id = city_data['id']
-    except:
-        city = settings.MOONBIRTHDAY['default_city']
-        city_id = settings.MOONBIRTHDAY['default_city_id']
-    return city, city_id
 
 
 def get_cityes_not_unic_like_as(city):

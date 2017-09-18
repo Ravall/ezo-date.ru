@@ -5,6 +5,18 @@
 
 {% block title %}Биоритмы человека.<br/>Расчет по дате рождения{% endblock %}
 
+
+{% block img %}
+    {% if data  %}
+    <div id='biorythms_chart' style='height:300px;'></div>
+        {%  else %}
+        <img    src="{% static 'img/biorythms-promo.png' %}"
+                    alt='Биоритмы по дате рождения'
+                    title='Биоритмы человека' />
+    {% endif %}
+{% endblock %}
+
+
 {% block text_content %}
 <div id='text_content'>
     {% include "user/form/simple_form.html" with button="Рассчитать" %}
@@ -18,7 +30,24 @@
     <p> diff - Количество дней, прошедших с даты рождения до текущего момента. Для расчета этого числа нужно количество полных лет умножить на 365 и сложить с количеством высокосных годов, которые были за с момента рождения по настоящий день. К полученному числу прибавить количество дней прожитых с начала этого года. </p>
     <p>Полученное значение Y - значение биоритма в процентах. При этом: 100% - наиболее высокие показатель, -100% (отрицательный) - наиболее низкий.</p>
 </div>
+
+
+    <script type="text/javascript">
+{% autoescape off %}
+    var biorythm_data = {{data|default:"''"}};
+    var today_date = '{% now "Y-m-d" %}';
+    var url_ajax_get_data = '{% url 'ajax_get_data' %}';
+    var current_date = '{{date_map.current}}';
+
+{% endautoescape %}
+
+</script>
+{% if data %}
+<script src="{% static "js/biotythms.js" %}"></script>
+{% endif %}
 {% endblock %}
+
+
 
 
 

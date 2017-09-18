@@ -1,75 +1,79 @@
 # -*- coding: utf-8 -*-
-import re
-from serv.views import ApiRequestMixin, SessionMixin
-from django.views.generic import TemplateView
-from serv.views import CityFormMixin
-from django.views.generic.edit import ProcessFormView
+from serv.views import CityLiveMixin, ServiceMixin
 from user.service.sun import get_sun_info
-from datetime import datetime
-from django.http import HttpResponseRedirect
+from moonbirthday.service import get_geo_by_cityid
+from django.views.generic.edit import ProcessFormView, FormMixin
+from user.forms.form import CityLiveForm
 from django.core.urlresolvers import reverse_lazy
-from moonbirthday.service import get_default_city, get_geo_by_cityid
+from django.http import HttpResponseRedirect
+from user.service.city import get_city_by_id
 
 
+class SuntimeSerivce(CityLiveMixin, ServiceMixin):
+    service = 'suntime'
 
-class SuntimeMixin(TemplateView, SessionMixin):
-    url = ''
     def get_context_data(self, **kwargs):
-        kwargs.setdefault('service', 'suntime')
-        kwargs.setdefault('url', self.url)
-
+        context = super(SuntimeSerivce, self).get_context_data(**kwargs)
         city, city_id = self.get_city()
-        kwargs.setdefault('city',  re.sub('\(.*\)', '', city).strip())
-
-        geo = get_geo_by_cityid(city_id)
-        now = datetime.now()
-        kwargs.setdefault('sun_info', get_sun_info(now, geo))
-        
-        return super(SuntimeMixin, self).get_context_data(**kwargs)
-
-    def get_city(self):
-        value = self.get_value('city_live')
-        if value:
-            city, city_id = value.split('%%')
-        else:
-            city, city_id = get_default_city(self.request.META['REMOTE_ADDR'])
-        return city, city_id
+        self.geo = get_geo_by_cityid(city_id)
+        context.update({
+            'now': self.now,
+            'sun_info': get_sun_info(self.now, self.geo),
+            'city': city,
+            'geo': self.geo
+        })
+        return context
 
 
-class IndexView(SuntimeMixin):
+class IndexView(SuntimeSerivce):
     template_name = 'suntime/index.html'
-    url  = 'suntime_home'
+    url = 'suntime_home'
 
 
-class ArticlesView(ApiRequestMixin, SuntimeMixin):
+class ArticlesView(SuntimeSerivce):
     template_name = 'suntime/articles.html'
-    url  = 'suntime_articles'
+    url = 'suntime_articles'
 
-    def get_context_data(self, **kwargs):
-        context = super(ArticlesView, self).get_context_data(**kwargs)
-        context['articles'] = self.api_get_by_tags('suntime')
-        return context 
+    def get_context(self, **kwargs):
+        return {
+            'articles': self.api_get_by_tags('suntime')
+        }
 
 
-class ArticleView(ApiRequestMixin, SuntimeMixin):
+class ArticleView(SuntimeSerivce):
     template_name = 'suntime/article.html'
-    url  = 'suntime_articles'
+    url = 'suntime_articles'
 
-    def get_context_data(self, **kwargs):
-        context = super(ArticleView, self).get_context_data(**kwargs)
-        context['article'] = self.api_get_article(context['artname'])
-        return context 
-        
-
+    def get_context(self, **kwargs):
+        return {
+            'article': self.api_get_article(kwargs['artname'])
+        }
 
 
-class ChangeCity(CityFormMixin, ProcessFormView, SuntimeMixin):
-    template_name = "suntime/city.html"
-    url = 'form'
+class ArticlesFormView(ProcessFormView, FormMixin, SuntimeSerivce):
+    url = 'suntime_form'
+    template_name = "suntime/form.html"
+    form_class = CityLiveForm
 
     def form_valid(self, form):
-        self.save_to_session(form)
-        return HttpResponseRedirect(reverse_lazy('suntime_home'))
+        self.request.session['suntime_city_id'] = self.request.POST['city_live_1']
+        return HttpResponseRedirect(reverse_lazy('suntime_form_result'))
 
+
+class ArticlesFormResultView(IndexView):
+    url = 'suntime_form'
+    template_name = 'suntime/index.html'
+    city_id = False
+
+    def get(self, request, *args, **kwargs):
+        self.city_id = request.session.pop('suntime_city_id', False)
+        if not self.city_id:
+            return HttpResponseRedirect(reverse_lazy('suntime_form'))
+        return super(ArticlesFormResultView, self).get(request, *args, **kwargs)
+
+    def get_city(self):
+        if not self.city_id:
+            return super(ArticlesFormResultView, self).get_city()
+        return [get_city_by_id(self.city_id).name_ru, self.city_id]
 
 

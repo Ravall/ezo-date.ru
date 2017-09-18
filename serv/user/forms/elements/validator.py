@@ -18,9 +18,10 @@ def validator_date(value):
 
 
 def validator_time(value):
-    if not re.match('[0-9]{1,2}\:[0-9]{2}',value):
+    reg = re.match('^([0-9]{1,2})\:([0-9]{2})(\:[0-9]{2})?$',value)
+    if not reg:
         raise ValidationError('некорректное время. Введите время в формате чч:мм')
-    h,m = map(int, value.split(':'))
+    h, m = map(int, reg.groups()[0:2])
     if not (h>=0 and h<24 and m>=0 and m<60):
         raise ValidationError('некорректное время')
 

@@ -1,109 +1,105 @@
 # -*- coding: utf-8 -*-
-import json
 from datetime import datetime,timedelta
-from serv.views import ApiRequestMixin, SessionMixin, FullBirthDayFormMixin
-from django.views.generic import TemplateView
-from django.views.generic.edit import ProcessFormView
+from django.views.generic.edit import ProcessFormView, FormMixin
 from django.http import Http404
 from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponseRedirect
 from solar.service import get_solar_time
+from serv.views import ServiceMixin, LoginRequiredMixin
+from user.forms.form import FullBirthdayForm
 
 
-class SolarMixin(TemplateView):
-    url = ''
-    def get_context_data(self, **kwargs):
-        kwargs.setdefault('service', 'solar')
-        kwargs.setdefault('url', self.url)
-        return super(SolarMixin, self).get_context_data(**kwargs)
+class SolarService(ServiceMixin):
+    service = 'solar'
 
 
-class IndexView(ApiRequestMixin, SolarMixin):
-    '''
-    описание сервиса
-    '''
+class IndexView(SolarService):
     template_name = "solar/index.html"
     url = 'solar_home'
 
+    def get_context(self, **kwargs):
+        return {
+            'article': self.api_get_article('12_vazhnyh_dnyay_so_dnya_rozhdeniya')
+        }
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        context['article'] = self.api_get_article('12_vazhnyh_dnyay_so_dnya_rozhdeniya')
-        return context
 
-
-class Days12View(ApiRequestMixin, SolarMixin):
-    '''
-    список всех дней
-    '''
+class Days12View(SolarService):
     template_name = "solar/12.html"
     url = 'solar_12'
 
-    def get_context_data(self, **kwargs):
-        context = super(Days12View, self).get_context_data(**kwargs)
-        context['articles'] = self.api_get_by_tags('solar12')
-        return context
+    def get_context(self, **kwargs):
+        return {
+            'articles': self.api_get_by_tags('solar12')
+        }
 
 
-class DayView(ApiRequestMixin, SolarMixin):
-    '''
-    Просмотр статьи о конкретном дне 
-    '''
+class DayView(SolarService):
     template_name = "solar/day.html"
     url = 'solar_12'
 
     def get(self, request, *args, **kwargs):
-        num = int(kwargs['nday'])
-        if num < 1 or num > 12:
+        if not (int(kwargs['nday']) in range(1, 13)):
             raise Http404
         return super(DayView, self).get(request, *args, **kwargs)
 
-    def get_context_data(self, **kwargs):
-        context = super(DayView, self).get_context_data(**kwargs)
-        context['article'] = self.api_get_article('day_{0}'.format(context['nday']))
+    def get_context(self, **kwargs):
+        return {
+            'article': self.api_get_article('day_{0}'.format(kwargs['nday']))
+        }
+
+
+class SolarContext(SolarService):
+
+    def get_db_info(self):
+        return {
+            'city_id': self.profile.city_id,
+            'born_date': self.profile.born_date
+        }
+
+    def get_context(self, **kwargs):
+        context = {}
+        articles = self.api_get_by_tags('solar12')
+
+        year = kwargs.get('year', datetime.today().year)
+
+        solar_info = self.get_db_info()
+        if not solar_info:
+            return {}
+        solar_open_date = get_solar_time(solar_info['born_date'], solar_info['city_id'], int(year))
+        context['solar_open_time'] = solar_open_date
+        context['year'] = year
+
+        days = [{
+            'date': (solar_open_date + timedelta(days=i), solar_open_date + timedelta(days=i + 1)),
+            'article': articles[i],
+            'current': (datetime.today() >= solar_open_date + timedelta(days=i)
+                        and datetime.today() < solar_open_date + timedelta(days=i + 1))
+        } for i in range(12)]
+        context['days'] = days
         return context
 
 
-class FormView(FullBirthDayFormMixin, ProcessFormView, SolarMixin, SessionMixin):
+class FormView(ProcessFormView, FormMixin, SolarContext):
     url = 'form'
     template_name = "solar/form.html"
+    form_class = FullBirthdayForm
+
+    def get_db_info(self):
+        solar = self.request.session.pop('solar', False)
+        if solar:
+            solar['born_date'] = datetime.strptime(solar['born_date'], '%Y-%m-%d %H:%M')
+            self.template_name = "solar/form_result.html"
+        return solar
 
     def form_valid(self, form):
-        self.save_to_session(form)
-        return HttpResponseRedirect(reverse_lazy('solar_open'))
+        self.request.session['solar'] ={
+            'born_date': form.get_bd().strftime('%Y-%m-%d %H:%M'),
+            'city_id': form.get_city_id(self.request)
+        }
+        return HttpResponseRedirect(reverse_lazy('solar_form'))
 
 
-class OpenView(ApiRequestMixin, SolarMixin, SessionMixin):
+class OpenView(LoginRequiredMixin, SolarContext):
     url = 'solar_open'
     template_name = "solar/open.html"
 
-    def get(self, request, *args, **kwargs):
-        if not (
-            self.get_value('date') and self.get_value('time') and self.get_value('city')
-        ):
-            return HttpResponseRedirect(reverse_lazy('solar_form'))
-        return super(OpenView, self).get(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-
-        context = super(OpenView, self).get_context_data(**kwargs)
-        articles = self.api_get_by_tags('solar12')
-
-        b_dt = '{0} {1}'.format(self.get_value('date'), self.get_value('time'))
-        b_dt = datetime.strptime(b_dt, '%d.%m.%Y %H:%M')
-        city, city_id = self.get_value('city').split('%%')
-        year = kwargs.get('year', datetime.today().year)
-
-        solar_open_date = get_solar_time(b_dt, city_id, int(year))
-        context['solar_open_time'] = solar_open_date
-        context['year'] = year
-        
-        days = [{
-                'date': (solar_open_date+timedelta(days=i), solar_open_date+timedelta(days=i+1)),
-                'article': articles[i],
-                'current': (datetime.today() >= solar_open_date+timedelta(days=i)
-                           and  datetime.today() < solar_open_date+timedelta(days=i+1))
-            } for i in range(12)
-        ]
-        context['days'] = days
-        return context

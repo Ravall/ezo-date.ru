@@ -48,11 +48,59 @@ class CityElement(forms.MultiValueField):
     def __init__(self, *args, **kwargs):
         super(CityElement, self).__init__(self.fields, *args, **kwargs)
         self.validators.append(validator_city_field)
-        self.label = kwargs.get('label','Город рождения')
+        self.label = kwargs.get('label', 'Город рождения')
         
-    
     def compress(self, data_list):
-        return '{0}%%{1}'.format(data_list[0], data_list[1])
+        return '{0}%%{1}'.format(data_list[0], data_list[1]) if data_list else '%%0'
+
+
+class CityLiveElement(CityElement):
+    pass
 
     
-        
+class NameElement(forms.CharField):
+    widget = forms.widgets.TextInput(attrs={'placeholder': 'Полное имя данное при рождении'})
+    default_error_messages = {
+        'required': "Введите полное имя. Пример: Иван"
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(NameElement, self).__init__(*args, **kwargs)
+        self.label = 'Полное имя'
+
+
+class SurnameElement(forms.CharField):
+    widget = forms.widgets.TextInput(attrs={'placeholder': 'Фамилия. Например "Иванов"'})
+    default_error_messages = {
+        'required': "Введите фамилию. Пример Иванов"
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(SurnameElement, self).__init__(*args, **kwargs)
+        self.label = 'Род (фамилия)'
+
+
+class NewSurnameElement(SurnameElement):
+    widget = forms.widgets.TextInput(attrs={'placeholder': 'Новая фамилия'})
+    default_error_messages = {
+        'required': "Введите новую фамилию"
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(SurnameElement, self).__init__(*args, **kwargs)
+        self.label = 'Новая Фамилия, если менялась'
+
+
+class SexElement(forms.ChoiceField):
+    widget = forms.RadioSelect
+    default_error_messages = {
+        'required': "Введите ваш пол"
+    }
+
+    def __init__(self, *args, **kwargs):
+        super(SexElement, self).__init__(*args, **kwargs)
+        self.label = 'Выберете пол'
+        self.choices = (('m', 'мужской',), ('f', 'женский',))
+
+
+

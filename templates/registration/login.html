@@ -1,18 +1,14 @@
 {% extends "registration/layout.html" %}
+{% load i18n %}
+{% block meta_page_title %}Авторизация.{% endblock %}
+{% block title %}Войти{% endblock %}
 
-{% block content_title %}Авторизация{% endblock %}
-{% block meta_title %}Авторизация.{% endblock %}
+{% block text_content %}
 
+{% include "user/form/simple_form.html" with button="Войти" %}
+<div id='form'>
+    <p>Забыли пароль? <a href="{% url 'auth_password_reset' %}">восстановить доступ</a>.</p>
+</div>
 
-{% block content %}
-
-{% if not user.is_authenticated %}
-    {% include "user/form/simple_form.html" with button="Войти" %}
-    <div id='form'>
-        <p>Забыли пароль? <a href="{% url 'auth_password_reset' %}">восстановить доступ</a>.</p>
-    </div>
-{% else %}
-    <p>Вы уже успешно авторизовались. Делать это повторно - бессмысленно :)</p>
-{% endif %}
 
 {% endblock %}

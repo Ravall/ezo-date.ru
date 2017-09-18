@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django_geoip.models import IpRange
-from django.conf import settings
 from moonbirthday.models import SxgeoCities, SxgeoRegions
 from django.db import connection
 
@@ -47,19 +45,6 @@ def get_city(city):
         'long':str(city.lon),
         'timezone':str(region.timezone)
     }
-
-
-
-def get_default_city(ip):
-    try:
-        geoip_record = IpRange.objects.by_ip(ip)
-        city = geoip_record.city
-        city_data = get_city(city)
-        city_id = city_data['id']
-    except:
-        city = settings.MOONBIRTHDAY['default_city']
-        city_id = settings.MOONBIRTHDAY['default_city_id']
-    return city, city_id
 
 
 def is_city_exists(city):
