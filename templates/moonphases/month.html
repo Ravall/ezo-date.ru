@@ -21,7 +21,9 @@
 		<td><a
 				alt='описание: {{item.moon_day}} лунный день'
 				title='статья на тему: "{{item.moon_day}} лунный день"'
-				href="{% url 'moonphases_article' 'moon_day_' %}{{item.moon_day}}"
+                {% with item.moon_day|stringformat:"i" as day  %}
+				    href="{% url 'moonphases_article' "moon_day_"|add:day %}"
+                {% endwith %}
 			>{{item.moon_day}} лунный день</a></td>
 		<td>{% phase_time item 'periods' 'this_day' %}</td>
 		<td>{% alt_phase_period item.today %}</td>
