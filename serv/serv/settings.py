@@ -102,13 +102,13 @@ TEMPLATE_LOADERS = (
 
 
 MIDDLEWARE_CLASSES = (
+    'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'raven.contrib.django.raven_compat.middleware.Sentry404CatchMiddleware',
     'django_mobile.middleware.MobileDetectionMiddleware',
     'django_mobile.middleware.SetFlavourMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -257,13 +257,10 @@ GEOIP_COUNTRY = 'GeoIP.dat'
 GEOIP_CITY = 'GeoLiteCity.dat'
 GEO_CITY_DAT_FILE = GEOIP_PATH + '/' + GEOIP_CITY
 
-
-
-
 if not DEBUG:
     RAVEN_CONFIG = {
         'dsn': 'https://6da2125ce6b84aef8e3af4f28dbda5dc:5899748be08044529283495cdcffa09a@sentry.io/224338',
-        'release': raven.fetch_git_sha(os.path.dirname(os.pardir)),
+        'release': raven.fetch_git_sha(os.path.dirname(PATH)),
     }
 
 MOONBIRTHDAY = {
