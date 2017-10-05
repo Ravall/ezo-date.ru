@@ -93,7 +93,7 @@ class FormView(ProcessFormView, FormMixin, SolarContext):
 
     def form_valid(self, form):
         self.request.session['solar'] ={
-            'born_date': form.get_bd().strftime('%Y-%m-%d %H:%M'),
+            'born_date':  ':'.join(form.get_bd().isoformat(" ").split(':')[:2]),
             'city_id': form.get_city_id(self.request)
         }
         return HttpResponseRedirect(reverse_lazy('solar_form'))

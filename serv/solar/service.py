@@ -2,6 +2,7 @@
 import ephem
 from moonbirthday.service import get_geo_by_cityid, _to_utc
 from datetime import datetime, timedelta, time
+import calendar
 
 def get_sun_angle(dt, geo):
     ob = ephem.Observer()
@@ -15,7 +16,11 @@ def get_sun_angle(dt, geo):
 def get_solar_time(birthday_dt, city_id, year):
 
     geo = get_geo_by_cityid(city_id)
-    today_birthday = birthday_dt.replace(year=year)
+    today_replace = {'year': year, 'day': 28} \
+        if ((not calendar.isleap(year)) and birthday_dt.day == 29 and birthday_dt.month == 2) \
+        else {'year': year}
+
+    today_birthday = birthday_dt.replace(**today_replace)
 
     dd = today_birthday
     d_1 = datetime.combine(dd.date(), datetime.min.time())
@@ -58,7 +63,7 @@ def get_solar_time(birthday_dt, city_id, year):
         dd = d_1
         if a_cmp(d_1, d_2, birthday_dt, geo):
             break
-            
+
     # подберем минуту
     for m in range(60):
 
