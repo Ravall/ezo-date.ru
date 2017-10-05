@@ -4,10 +4,13 @@ from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from user.views import ProfileView
 from django.contrib.auth.decorators import login_required
+from django.views.generic.base import RedirectView
 
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     url(r'^profile/$', login_required(ProfileView.as_view()), name='user_profile'),
+    url(r'^$', RedirectView.as_view(url='/user/profile', permanent=False)),
 )
 
 if settings.DEBUG:

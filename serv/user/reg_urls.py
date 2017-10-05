@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from user.views import ActivationView, RegistrationView, ProfileView, PasswordChangeView
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
-
+from django.views.generic.base import RedirectView
 
 login_forbidden =  user_passes_test(lambda u: u.is_anonymous(), '/', None)
 
@@ -19,6 +19,8 @@ urlpatterns = patterns(
         login_forbidden(RegistrationView.as_view()),
         name='registration_register'
     ),
+
+
     url(
         r'^login/$',
         login_forbidden(auth_views.login), {
@@ -26,6 +28,8 @@ urlpatterns = patterns(
         'extra_context': {'service': 'login'}},
         name='auth_login'
     ),
+    url(r'^login/(.*)', RedirectView.as_view(url='/user/login')),
+
     url(
         r'^logout/$',
         auth_views.logout,
@@ -97,6 +101,7 @@ urlpatterns = patterns(
     ),
     url(r'', include('registration.backends.model_activation.urls')),
     url(r'', include('user.urls')),
+
 )
 
 if settings.DEBUG:
