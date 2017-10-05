@@ -13,31 +13,42 @@ def get_sun_angle(dt, geo):
 
 
 def get_solar_time(birthday_dt, city_id, year):
+
     geo = get_geo_by_cityid(city_id)
     today_birthday = birthday_dt.replace(year=year)
-    angl_bth = get_sun_angle(birthday_dt, geo)
-    angl_td = get_sun_angle(today_birthday, geo)
-    dd = today_birthday
-    d_1 = datetime.combine(dd.date(),datetime.min.time())
-    d_2 = datetime.combine(dd.date(),datetime.max.time())
 
-    def cmp(d_1, d_2, birthday_dt, geo):
-        return (
-            get_sun_angle(d_1, geo) < get_sun_angle(birthday_dt, geo)
-            and
-            get_sun_angle(d_2, geo) > get_sun_angle(birthday_dt, geo)
+    dd = today_birthday
+    d_1 = datetime.combine(dd.date(), datetime.min.time())
+    d_2 = datetime.combine(dd.date(), datetime.max.time())
+
+    def a_cmp(d1, d2, bdt, g):
+        return not (
+            (get_sun_angle(d2, g) < get_sun_angle(bdt, g)) or (get_sun_angle(d1, g) > get_sun_angle(bdt, g))
         )
 
-    while not cmp(d_1, d_2, birthday_dt, geo):
+    count = 0
+    while not a_cmp(d_1, d_2, birthday_dt, geo):
 
+        sign = 0
+        # если угол солнца в день рождения больше чем конец дня - то смотрим след день
         if get_sun_angle(d_2, geo) < get_sun_angle(birthday_dt, geo):
             sign = 1
+        # если угол солнца в день рождения меньше  чем начало дня - то смотрим пред день день
         if get_sun_angle(d_1, geo) > get_sun_angle(birthday_dt, geo):
             sign = -1
 
+        if sign == 0:
+            # для порядку, но такого быть не должно
+            break
+
         dd = dd + timedelta(days=sign)
-        d_1 = datetime.combine(dd.date(),datetime.min.time())
-        d_2 = datetime.combine(dd.date(),datetime.max.time())
+        d_1 = datetime.combine(dd.date(), datetime.min.time())
+        d_2 = datetime.combine(dd.date(), datetime.max.time())
+
+        # на всяки случай, но такого быть не должно
+        count += 1
+        if count > 1000:
+            raise Exception('bug! loop too mach')
 
     # подберем час
     for h in range(24):
@@ -45,15 +56,16 @@ def get_solar_time(birthday_dt, city_id, year):
         d_1 = datetime.combine(dd.date(),time(h, 0, 0, 0))
         d_2 = datetime.combine(dd.date(),time(h, 59, 59, 999999))
         dd = d_1
-        if cmp(d_1, d_2, birthday_dt, geo):
+        if a_cmp(d_1, d_2, birthday_dt, geo):
             break
+            
     # подберем минуту
     for m in range(60):
 
-        d_1 = datetime.combine(dd.date(),time(h, m, 0, 0))
-        d_2 = datetime.combine(dd.date(),time(h, m, 59, 999999))
+        d_1 = datetime.combine(dd.date(), time(h, m, 0, 0))
+        d_2 = datetime.combine(dd.date(), time(h, m, 59, 999999))
         dd = d_1
-        if cmp(d_1, d_2, birthday_dt, geo):
+        if a_cmp(d_1, d_2, birthday_dt, geo):
             break
     return dd
 
