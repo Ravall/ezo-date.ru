@@ -4,8 +4,8 @@
 
 {% block meta_page_title %}Открытие соляра: {{ nday }} день после дня рождения.{% endblock %}
 
-{% block meta_description %}{{ article.text.annonce }}{% endblock %}
-{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
+{% block meta_description %}{{ article.meta.description }}{% endblock %}
+{% block meta_keywords %}{{ article.meta.keywords }}{% endblock %}
 
 
 {% block og_meta %}
@@ -27,9 +27,9 @@
 
 
 {% block text_content %}
-    <h1>{{ article.text.title }}</h1>
+    <h1>{{ article.content.title }}</h1>
 
     {% autoescape off %}
-        {{ article.text.content }}
+        {{ article.content.text }}
     {% endautoescape %}
 {% endblock %}

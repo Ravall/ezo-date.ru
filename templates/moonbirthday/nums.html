@@ -10,10 +10,10 @@
 <ul>
     {% for article in articles %}
         <li>
-            <a href="{% url 'moonbirthday_one_num' article.name|url_to_digit %}"
-                alt="{{article.name|url_to_digit}} лунный день рождения"
-                title="{{article.name|url_to_digit}} лунный день рождения. Характеристика"
-            >{{article.title}}</a>
+            <a href="{% url 'moonbirthday_one_num' article.url|url_to_digit %}"
+                alt="{{article.url|url_to_digit}} лунный день рождения"
+                title="{{article.url|url_to_digit}} лунный день рождения. Характеристика"
+            >{{article.content.title}}</a>
         </li>
     {% endfor %}
 </ul>

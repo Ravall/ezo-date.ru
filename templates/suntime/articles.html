@@ -12,7 +12,7 @@
 		<ul>
     		{% for article in articles %}
         	<li>
-            	<a alt='статья: {{article.title}}' title='статья на тему: "{{article.title}}"' href="{% url 'suntime_article' article.name %} ">{{article.title}}</a>
+            	<a alt='статья: {{article.content.title}}' title='статья на тему: "{{article.content.title}}"' href="{% url 'suntime_article' article.url %} ">{{article.content.title}}</a>
         	</li>
     		{% endfor %}
 		</ul>

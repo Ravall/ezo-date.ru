@@ -20,10 +20,10 @@
 <ul>
     {% for article in articles %}
         <li>
-            <a href="{% url 'solar_day' article.name|url_to_num %}"
+            <a href="{% url 'solar_day' article.url|url_to_num %}"
                 alt="{{ forloop.counter }} день с момента открытия соляра"
                 title="{{ forloop.counter }} день с момента открытия соляра"
-            >{{article.title}}</a>
+            >{{article.content.title}}</a>
         </li>
     {% endfor %}
 </ul>

@@ -4,6 +4,8 @@ import requests
 from md5 import md5
 from django.core.cache import cache
 from django.conf import settings
+import logging
+
 
 
 def api_request(url):
@@ -15,8 +17,9 @@ def api_request(url):
         API_URL базовый урл до api
         и настроек кэширования
     """
-    url = '{0}/api/{1}'.format(settings.API_URL, url)
-
+    logger = logging.getLogger('django')
+    url = '{0}/{1}'.format(settings.API_URL, url)
+    logger.info("API request url:{}".format(url))
     # cache_key - долгосрочный кэш.
     # На случай если что-то сломается - чтобы брать от туда
     cache_key = md5(url).hexdigest()
@@ -32,6 +35,7 @@ def api_request(url):
         request = requests.get(url)
         request.raise_for_status()
         result = request.content
+
         cache.set(
             cache_key_fast, result,
             settings.CACHE_API_TIMEOUT_FAST
@@ -46,4 +50,6 @@ def api_request(url):
     except requests.exceptions.RequestException:
         # если произошла ошибка - берем из Кэша
         result = cache.get(cache_key, '')
+        if not result:
+            raise Exception('request return null')
     return result

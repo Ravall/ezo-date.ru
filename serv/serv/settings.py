@@ -187,20 +187,42 @@ LOGGING = {
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue'
         }
+    },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
     },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        }
+        },
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
     },
     'loggers': {
         'django.request': {
             'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
+        },
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level': 'INFO',
         },
     }
 }
@@ -233,7 +255,7 @@ else:
     from production import DATABASES
 
 
-API_URL = 'http://api.sancta.ru'
+API_URL = 'http://85.143.222.115:5000'
 
 ALLOWED_HOSTS = ['ezo-date.ru', '127.0.0.1']
 
@@ -242,8 +264,8 @@ ROOT_URLCONF = 'serv.urls'
 WSGI_APPLICATION = 'serv.wsgi.application'
 
 
-CACHE_API_TIMEOUT = 60*60*24*3
-CACHE_API_TIMEOUT_FAST = 60*1
+CACHE_API_TIMEOUT = 0 #60*60*24*3
+CACHE_API_TIMEOUT_FAST = 0 #60*1
 
 
 CACHES = {

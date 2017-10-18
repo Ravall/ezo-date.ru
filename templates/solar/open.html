@@ -26,10 +26,10 @@
     <tr {% if day.current %} class='active' {% endif %}>
         <td>день&nbsp;{{ forloop.counter }}</td>
         <td>{{ day.date.0|date:"d.m"}}&nbsp;{{day.date.0|date:"H:i" }}&nbsp;-&nbsp;{{ day.date.1|date:"d.m"}}&nbsp;{{day.date.1|date:"H:i" }}</td>
-        <td><a href="{% url 'solar_day' day.article.name|url_to_num %}"
+        <td><a href="{% url 'solar_day' day.article.url|url_to_num %}"
                 alt="{{ forloop.counter }} день с момента открытия соляра"
                 title="{{ forloop.counter }} день с момента открытия соляра"
-            >{{day.article.title}}</a></td>
+            >{{day.article.content.title}}</a></td>
     </tr>
 {% endfor %}
 </table>

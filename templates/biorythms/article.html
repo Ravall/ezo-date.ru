@@ -1,15 +1,15 @@
 {% extends 'biorythms/layout.html' %}
 {% load static %}
 
-{% block meta_page_title %}{{article.text.title}}.{% endblock %}
+{% block meta_page_title %}{{article.content.title}}.{% endblock %}
 
-{% block meta_description %}{{ article.text.annonce }}{% endblock %}
-{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
+{% block meta_description %}{{ article.meta.description }}{% endblock %}
+{% block meta_keywords %}{{ article.meta.keywords }}{% endblock %}
 
 
 {% block og_meta %}
-    <meta property="og:title" content="{{ article.text.title }}" />
-    <meta property="og:url" content="http://{{SITE_URL}}{% url 'bio_article' article.name %}"/>
+    <meta property="og:title" content="{{ article.content.title }}" />
+    <meta property="og:url" content="http://{{SITE_URL}}{% url 'bio_article' article.url %}"/>
     <meta property="og:type" content="article"/>
     <meta property="og:type:article:section" content="Астрономия"/>
 {% endblock %}
@@ -17,9 +17,9 @@
 
 {% block text_content %}
 
-	<h1>{{ article.text.title }}</h1>
+	<h1>{{ article.content.title }}</h1>
 
     {% autoescape off %}
-        {{ article.text.content }}
+        {{ article.content.text }}
     {% endautoescape %}  
 {% endblock %}

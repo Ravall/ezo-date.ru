@@ -2,8 +2,8 @@
 {% load static %}
 
 {% block page_title %}Число рождения {{ num }}{% endblock %}
-{% block meta_description %}{{ article.text.annonce }}{% endblock %}
-{% block meta_keywords %}{{ article.text.keywords }}{% endblock %}
+{% block meta_description %}{{ article.meta.description }}{% endblock %}
+{% block meta_keywords %}{{ article.meta.keywords }}{% endblock %}
 
 {% block og_meta %}
     <meta property="og:title" content="Мое число рождения {{ num }}!" />
@@ -44,7 +44,7 @@
 
 {% block text_content %}
     {% autoescape off %}
-        {{ article.text.content }}
+        {{ article.content.text }}
     {% endautoescape %}
 
 

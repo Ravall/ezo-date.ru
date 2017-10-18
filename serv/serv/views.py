@@ -30,37 +30,24 @@ class AjaxTemplateMixin(object):
 
 
 class ApiRequestMixin(TemplateView):
-    '''
+    """
     Миксин с запросами к API
-    '''
-
-    
+    """
     def api_get_article(self, article_name):
-        '''
+        """
         получение статьи по названию
-        '''
-        content_raw = api_request(
-            'sancta/article/{0}.json'.format(article_name)
-        )
-        if content_raw:
-            content = json.loads(content_raw)
-        else:
-            content = ''
-        return content
-
+        """
+        content_raw = api_request('ezodates/posts/{}'.format(article_name))
+        content = json.loads(content_raw) if content_raw else ''
+        return content['data'] if content['status'] == 200 else ''
 
     def api_get_by_tags(self, tag):
-        '''
+        """
         получение статей по тегу
-        '''
-        content_raw = api_request(
-            'sancta/article/tag/{0}.json'.format(tag)
-        )
-        if content_raw:
-            content = json.loads(content_raw)
-        else:
-            content = ''
-        return content
+        """
+        content_raw = api_request('ezodates/posts?category={}'.format(tag))
+        content = json.loads(content_raw) if content_raw else ''
+        return content['data'] if content['status'] == 200 else ''
 
 
 class ProfileMixin(FormMixin):
